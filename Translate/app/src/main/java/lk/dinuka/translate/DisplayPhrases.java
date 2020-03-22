@@ -10,5 +10,7 @@ public class DisplayPhrases extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_phrases);
+
+        // get all english phrases from db and display
     }
 }
