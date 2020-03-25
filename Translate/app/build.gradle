@@ -29,4 +29,8 @@ dependencies {
 
     implementation 'com.ibm.watson.developer_cloud:android-sdk:0.5.2'
     implementation ('com.ibm.watson:ibm-watson:8.2.1') {exclude group: 'com.google.code.findbugs', module: 'annotations'}
+
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version" //
 }

@@ -13,11 +13,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    // Opening of Activities using button clicks
+        // Opening of Activities using button clicks
 
-    public void addPhrases(View view) {
+//        add phrases button
         Button addPhrasesButton = findViewById(R.id.add_phrases_button);
         addPhrasesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,9 +25,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void displayPhrases(View view) {
+//        display phrases button
         Button displayPhrasesButton = findViewById(R.id.display_phrases_button);
         displayPhrasesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,9 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void editPhrases(View view) {
+//        edit phrases button
         Button editPhrasesButton = findViewById(R.id.edit_phrases_button);
         editPhrasesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,9 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void languageSubscription(View view) {
+//        language subscription button
         Button langSubscriptionButton = findViewById(R.id.language_subscription_button);
         langSubscriptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,9 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void translate(View view) {
+//        translate button
         Button translateButton = findViewById(R.id.translate_button);
         translateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,5 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }
