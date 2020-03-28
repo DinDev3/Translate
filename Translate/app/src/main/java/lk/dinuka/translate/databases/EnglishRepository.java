@@ -1,9 +1,12 @@
-package lk.dinuka.translate.Databases;
+package lk.dinuka.translate.databases;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
+
+import java.util.List;
 
 import lk.dinuka.translate.util.AppUtils;
 
@@ -73,23 +76,23 @@ public class EnglishRepository {
 //        }
 //    }
 
-    public void deleteTask(final EnglishEntered englishEntered) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                translationDB.englishDAO().deleteTask(englishEntered);
-                return null;
-            }
-        }.execute();
-    }
+//    public void deleteTask(final EnglishEntered englishEntered) {
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//                translationDB.englishDAO().deleteTask(englishEntered);
+//                return null;
+//            }
+//        }.execute();
+//    }
 
 //    public LiveData<Note> getEnglish(int id) {
 //        return noteDatabase.daoAccess().getTask(id);
 //    }
-//
-//    public LiveData<List<Note>> getEnglish() {
-//        return noteDatabase.daoAccess().fetchAllTasks();
-//    }
+
+    public LiveData<List<EnglishEntered>> getEnglishFromDB() {            // get all the English words/ phrases stored in the database
+        return translationDB.englishDAO().fetchAllEnglish();
+    }
 
 
 }
