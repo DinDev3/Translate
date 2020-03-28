@@ -83,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        refreshData();      // reload updated data from db into allEnglishFromDB arrayList if there were any changes in data
+
+    }
+
+
+    public void refreshData(){
         //       --------------------------------------------------------------------------------------------
         // this is placed here so that whenever new words are added, when coming back to the Main Screen and
         // going to a display words screen, the list of words get updated.
