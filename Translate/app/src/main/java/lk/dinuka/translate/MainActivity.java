@@ -1,13 +1,24 @@
 package lk.dinuka.translate;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import lk.dinuka.translate.databases.EnglishEntered;
+import lk.dinuka.translate.databases.EnglishRepository;
+
+
 public class MainActivity extends AppCompatActivity {
+
+    public static List<String> allEnglishFromDB = new ArrayList<>();        // holds all data received from dbZz
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,5 +77,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //       --------------------------------------------------------------------------------------------
+        // this is placed here so that whenever new words are added, when coming back to the Main Screen and
+        // going to a display words screen, the list of words get updated.
+
+        // get all english phrases from db and display
+        EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
+
+        englishRepository.getEnglishFromDB().observe(this, new Observer<List<EnglishEntered>>() {
+            @Override
+            public void onChanged(@Nullable List<EnglishEntered> allEnglish) {
+                allEnglishFromDB.clear();           // clearing existing data
+                for(EnglishEntered english : allEnglish) {
+                    allEnglishFromDB.add(english.getEnglish());     // saving all english word/ phrases received
+
+                    // can use these to check in console
+//                    System.out.println("-----------------------");
+//                    System.out.println(english.getId());
+//                    System.out.println(english.getEnglish());
+//                    System.out.println(english.getCreatedAt());
+//                    System.out.println(english.getUpdatedAt());
+                }
+            }
+        });
+//        --------------------------------------------------------------------------------------------
     }
 }

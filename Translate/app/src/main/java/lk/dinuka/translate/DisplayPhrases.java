@@ -1,37 +1,39 @@
 package lk.dinuka.translate;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import java.util.List;
-
-import lk.dinuka.translate.databases.EnglishEntered;
-import lk.dinuka.translate.databases.EnglishRepository;
+import lk.dinuka.translate.util.MyDisplayAdapter;
 
 public class DisplayPhrases extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_phrases);
 
-        // get all english phrases from db and display
-        EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
 
-        englishRepository.getEnglishFromDB().observe(this, new Observer<List<EnglishEntered>>() {
-            @Override
-            public void onChanged(@Nullable List<EnglishEntered> allEnglish) {
-                for(EnglishEntered english : allEnglish) {
-                    System.out.println("-----------------------");
-                    System.out.println(english.getId());
-                    System.out.println(english.getEnglish());
-                    System.out.println(english.getCreatedAt());
-                    System.out.println(english.getUpdatedAt());
-                }
-            }
-        });
+        recyclerView = findViewById(R.id.display_recycler_view);
+
+
+        recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
+
+        // Use a linear layout within the recycler view
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+        // specify the adapter (a bridge between a UI component and a data source)
+        mAdapter = new MyDisplayAdapter(MainActivity.allEnglishFromDB);          // insert list of words here
+        recyclerView.setAdapter(mAdapter);
+
     }
 }
