@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Translate</string>
+    <string name="add_phrases_text">Add Phrases</string>
+    <string name="display_phrases_text">Display Phrases</string>
+    <string name="edit_phrases_text">Edit Phrases</string>
+    <string name="language_subscription_text">Language Subscription</string>
+    <string name="translate_text">Translate</string>
+    <string name="enter_an_english_word_phrase_text">Enter an English Word/ Phrase</string>
+    <string name="save_button">Save</string>
+    <string name="select_a_word_to_edit_text">Select a Word to Edit</string>
+    <string name="edit_text">Edit</string>
+    <string name="update_text">Update</string>
+</resources>
