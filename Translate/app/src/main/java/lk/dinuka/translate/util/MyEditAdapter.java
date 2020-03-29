@@ -13,12 +13,11 @@ import java.util.List;
 
 import lk.dinuka.translate.R;
 
-public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHolder>{
+public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHolder> {
 
     private List<String> mDataset;      // list of all english from db will be transferred here
 
     private int lastSelectedPosition = -1;      // stores the radio selection position
-
 
 
     // constructor of adapter
@@ -33,7 +32,7 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         // Create new views (invoked by the layout manager)
 
         // create a new view
-        View v =  LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_edit_text_view, parent, false);
 
         MyViewHolder vh = new MyViewHolder(v);
@@ -62,7 +61,7 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
 
     // Provide a reference to the views for each data item
     // provide access to all the views for a data item in a view holder
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textView;       // each data item has a String
         public RadioButton selectionState;
@@ -70,9 +69,17 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         public MyViewHolder(@NonNull View itemView) {       // constructor of individual view element
             super(itemView);
 
-            textView =  itemView.findViewById(R.id.text_display_line);
+            textView = itemView.findViewById(R.id.text_display_line);
             selectionState = itemView.findViewById(R.id.radio_selection_english);
 
+
+            textView.setOnClickListener(new View.OnClickListener() {            // choose radio if text is clicked
+                @Override
+                public void onClick(View view) {
+                    lastSelectedPosition = getAdapterPosition();
+                    notifyDataSetChanged();
+                }
+            });
 
             selectionState.setOnClickListener(new View.OnClickListener() {
                 @Override
