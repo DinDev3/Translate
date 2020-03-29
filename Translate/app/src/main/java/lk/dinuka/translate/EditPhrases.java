@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RadioButton;
 
 import lk.dinuka.translate.util.MyDisplayAdapter;
 import lk.dinuka.translate.util.MyEditAdapter;
@@ -14,6 +15,9 @@ public class EditPhrases extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+
+    String chosenPhrase;             // stores the chosen English word/ phrase to be edited
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +36,7 @@ public class EditPhrases extends AppCompatActivity {
 
 
         // specify the adapter (a bridge between a UI component and a data source)
-//        mAdapter = new MyEditAdapter(MainActivity.allEnglishFromDB);          // insert list of words here
-
-        // change mAdapter >>>>>> create another adapter class to handle this------->>>>>>>
-
+        mAdapter = new MyEditAdapter(MainActivity.allEnglishFromDB);          // insert list of words here
         recyclerView.setAdapter(mAdapter);
 
 
@@ -43,10 +44,12 @@ public class EditPhrases extends AppCompatActivity {
 
     public void chooseEnglish(View view) {
 
+
+
         //display chosen english in edit text box <- only if a phrase/ word is chosen
-//        if (chosenPhrase!=null){
-//
-//        }
+        if (chosenPhrase!=null){
+
+        }
 
     }
 
