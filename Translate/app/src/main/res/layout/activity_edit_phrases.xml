@@ -37,6 +37,7 @@
         android:gravity="center"
         android:hint="@string/select_a_word_to_edit_text"
         android:inputType="textPersonName"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/save_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/edit_button" />

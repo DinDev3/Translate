@@ -21,8 +21,8 @@ public interface EnglishDAO {
     LiveData<List<EnglishEntered>> fetchAllEnglish();
 
 
-//    @Query("SELECT * FROM EnglishEntered WHERE id =:taskId")        // get a specified English word (specified by id here)
-//    LiveData<EnglishEntered> getEnglish(int taskId);
+    @Query("SELECT * FROM EnglishEntered WHERE id =:id")        // get a specified English word (specified by id here)
+    LiveData<EnglishEntered> getEnglishByID(int id);
 
 
     @Update

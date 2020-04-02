@@ -103,12 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 for(EnglishEntered english : allEnglish) {
                     allEnglishFromDB.add(english.getEnglish());     // saving all english word/ phrases received
 
-                    // can use these to check in console
-//                    System.out.println("-----------------------");
-//                    System.out.println(english.getId());
-//                    System.out.println(english.getEnglish());
-//                    System.out.println(english.getCreatedAt());
-//                    System.out.println(english.getUpdatedAt());
+//                     can use these to check in console
+                    System.out.println("-----------------------");
+                    System.out.println(english.getId());
+                    System.out.println(english.getEnglish());
+                    System.out.println(english.getCreatedAt());
+                    System.out.println(english.getUpdatedAt());
                 }
             }
         });

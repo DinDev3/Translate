@@ -1,5 +1,7 @@
 package lk.dinuka.translate.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +73,6 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
 
             textView = itemView.findViewById(R.id.text_display_line);
             selectionState = itemView.findViewById(R.id.radio_selection_english);
-
 
             textView.setOnClickListener(new View.OnClickListener() {            // choose radio if text is clicked
                 @Override
