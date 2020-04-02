@@ -1,23 +1,19 @@
 package lk.dinuka.translate;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
-import javax.annotation.Nullable;
+import java.util.List;
 
-import lk.dinuka.translate.databases.EnglishEntered;
-import lk.dinuka.translate.databases.EnglishRepository;
-import lk.dinuka.translate.util.AppUtils;
-import lk.dinuka.translate.util.MyDisplayAdapter;
+import lk.dinuka.translate.databases.english.EnglishEntered;
+import lk.dinuka.translate.databases.english.EnglishRepository;
 import lk.dinuka.translate.util.MyEditAdapter;
 
 public class EditPhrases extends AppCompatActivity {
@@ -58,7 +54,7 @@ public class EditPhrases extends AppCompatActivity {
 
 
         //display chosen english in edit text box <- only if a phrase/ word is chosen
-        if (chosenPhrase!=null){
+        if (chosenPhrase != null) {
 
         }
 
@@ -69,22 +65,29 @@ public class EditPhrases extends AppCompatActivity {
         // X - remove old english phrase from db
         // X - insert new phrase into db
         // update english in db
-        EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
-//        EnglishEntered englishEntered = englishRepository.getEnglishByID(2);
-
-// CAN'T GET DATABASE ENTRY OBJECT FROM ID>>>>>>>>>>>>>>?????????????????!!!!!!!!
 
 
-        // This creates a new phrase and adds it into the position. It replaces the previous record
-        // created_at is null
-
-        EnglishEntered englishEntered = new EnglishEntered();
-        englishEntered.setId(2);                // get this ID from the chosen one
-
-//        englishEntered.setEnglish("Hello World!");          // text to be changed
-//        englishRepository.updateTask(englishEntered);
+        // get one english phrase from db and display
+        final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
 
 
-        // refresh page with new info ------------
+        // get the ID passed in from the chosen one----------->>>>>>
+
+        englishRepository.getEnglishByID(1).observe(this, new Observer<EnglishEntered>() {
+            @Override
+            public void onChanged(EnglishEntered englishEntered) {
+                System.out.println(englishEntered.getId());
+                System.out.println(englishEntered.getEnglish());
+                System.out.println(englishEntered.getCreatedAt());
+                System.out.println(englishEntered.getUpdatedAt());
+
+                englishEntered.setEnglish("Hello World!");          // text to be changed
+                englishRepository.updateTask(englishEntered);
+
+                // this works, but repeatedly prints the details (Keeps accessing this loop)
+            }
+
+            // refresh page with new info ------------
+        });
     }
 }

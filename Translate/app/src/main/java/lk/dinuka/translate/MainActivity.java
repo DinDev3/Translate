@@ -10,15 +10,22 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import lk.dinuka.translate.databases.EnglishEntered;
-import lk.dinuka.translate.databases.EnglishRepository;
+import lk.dinuka.translate.databases.english.EnglishEntered;
+import lk.dinuka.translate.databases.english.EnglishRepository;
+import lk.dinuka.translate.databases.foreign.ForeignLanguage;
+//import lk.dinuka.translate.databases.foreign.ForeignRepository;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static List<String> allEnglishFromDB = new ArrayList<>();        // holds all data received from dbZz
+    public static List<String> allEnglishFromDB = new ArrayList<>();        // holds all English data received from db
+    public static HashMap<String, Boolean> allForeignLanguages = new HashMap<>();        // holds all Foreign subscriptions received from db with subscription status
+
+    // language codes can be stored with the name of the foreign language in a different HashMap in the translate page.
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void refreshData(){
+    public void refreshData() {
         //       --------------------------------------------------------------------------------------------
         // this is placed here so that whenever new words are added, when coming back to the Main Screen and
         // going to a display words screen, the list of words get updated.
@@ -100,18 +107,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<EnglishEntered> allEnglish) {
                 allEnglishFromDB.clear();           // clearing existing data
-                for(EnglishEntered english : allEnglish) {
+                for (EnglishEntered english : allEnglish) {
                     allEnglishFromDB.add(english.getEnglish());     // saving all english word/ phrases received
 
 //                     can use these to check in console
-                    System.out.println("-----------------------");
-                    System.out.println(english.getId());
-                    System.out.println(english.getEnglish());
-                    System.out.println(english.getCreatedAt());
-                    System.out.println(english.getUpdatedAt());
+//                    System.out.println("-----------------------");
+//                    System.out.println(english.getId());
+//                    System.out.println(english.getEnglish());
+//                    System.out.println(english.getCreatedAt());
+//                    System.out.println(english.getUpdatedAt());
                 }
             }
         });
+
 //        --------------------------------------------------------------------------------------------
+
+//        // get all foreign languages from db and display with subscription status
+//        // get all english phrases from db and display
+//        ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
+//
+//        foreignRepository.getLangsFromDB().observe(this, new Observer<List<ForeignLanguage>>() {
+//            @Override
+//            public void onChanged(@Nullable List<ForeignLanguage> allLangs) {
+//                allForeignLanguages.clear();           // clearing existing data
+//                for (ForeignLanguage language : allLangs) {
+//                    if (language.getSubscriptionStatus() != allForeignLanguages.get(language.getSubscriptionStatus()))
+//                        allForeignLanguages.put(language.getLanguage(), language.getSubscriptionStatus());     // get the subscription status of the language
+//                }
+//            }
+//        });
     }
 }

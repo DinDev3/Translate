@@ -1,4 +1,4 @@
-package lk.dinuka.translate.databases;
+package lk.dinuka.translate.databases.english;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

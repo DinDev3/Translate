@@ -1,4 +1,4 @@
-package lk.dinuka.translate.databases;
+package lk.dinuka.translate.databases.english;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -8,6 +8,7 @@ import androidx.room.Room;
 
 import java.util.List;
 
+import lk.dinuka.translate.databases.TranslationDB;
 import lk.dinuka.translate.util.AppUtils;
 
 public class EnglishRepository {

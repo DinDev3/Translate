@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import lk.dinuka.translate.databases.EnglishRepository;
+import lk.dinuka.translate.databases.english.EnglishRepository;
 
 public class AddPhrases extends AppCompatActivity {
     private EditText enterEnglish;
