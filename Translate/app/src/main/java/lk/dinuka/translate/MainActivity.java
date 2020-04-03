@@ -124,8 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        --------------------------------------------------------------------------------------------
 
-        // get all foreign languages from db and display with subscription status
-        // get all english phrases from db and display
+        // get all foreign languages from db. Extract language name & subscription status
         ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
 
         foreignRepository.getLangsFromDB().observe(this, new Observer<List<ForeignLanguage>>() {
