@@ -5,13 +5,17 @@
     android:layout_height="50dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    android:background="@drawable/border">
+    android:background="@drawable/border"
+    android:focusable="true">
 
     <CheckedTextView
         android:id="@+id/language_checked_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:checkMark="@android:drawable/checkbox_off_background"
         android:checked="false"
-        android:clickable="false"
-        android:gravity="center_vertical" />
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:focusable="true" />
 </RelativeLayout>

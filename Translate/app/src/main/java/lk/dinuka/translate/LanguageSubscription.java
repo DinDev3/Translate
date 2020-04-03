@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckedTextView;
 
 import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.cloud.sdk.core.security.Authenticator;
@@ -38,7 +39,6 @@ public class LanguageSubscription extends AppCompatActivity {
 
         // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
         // with boolean value of subscribed>>>>>>>>>>>>>>>>>>>>>>>>
-
 
 
         // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
