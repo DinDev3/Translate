@@ -15,7 +15,9 @@ import com.ibm.watson.language_translator.v3.LanguageTranslator;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguage;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import lk.dinuka.translate.databases.foreign.ForeignRepository;
 import lk.dinuka.translate.util.MyLanguageAdapter;
@@ -28,13 +30,15 @@ public class LanguageSubscription extends AppCompatActivity {
 
     private LanguageTranslator translationService;          // translation service
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_subscription);
 
-        // get and display all foreign languages stored in a separate database (foreignLanguagesDB?)
+        // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
         // with boolean value of subscribed>>>>>>>>>>>>>>>>>>>>>>>>
+
 
 
         // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
@@ -52,9 +56,16 @@ public class LanguageSubscription extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
+        List<String> allForeignLanguages = new ArrayList<>();
+
+        for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
+            allForeignLanguages.add(entry.getKey());              //adding value of selected key into playerNames arrayList
+        }
+
+
         // specify the adapter (a bridge between a UI component and a data source)
-//        mAdapter = new MyLanguageAdapter(MainActivity.allForeignLanguages);          // insert list of words here
-//        recyclerView.setAdapter(mAdapter);
+        mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
+        recyclerView.setAdapter(mAdapter);
 
     }
 
@@ -76,15 +87,19 @@ public class LanguageSubscription extends AppCompatActivity {
 
 //            System.out.println(languages);          // to check whether all languages were received
 
-            for (int i = 0; i< languages.getLanguages().size();i++) {               // get each language code & name separately
+            for (int i = 0; i < languages.getLanguages().size(); i++) {               // get each language code & name separately
                 String langName = languages.getLanguages().get(i).getName();      // language name
                 String langCode = languages.getLanguages().get(i).getLanguage();      // language code
 
 //                System.out.println(langName+": "+langCode);     // to check
 
-                // add each of these into the entity ForeignLanguage-------->>>>>>>>>>>>>>>>
+                // add each of these into the entity ForeignLanguage of the database
                 ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
-                foreignRepository.insertTask(langName,langCode);
+                foreignRepository.insertTask(langName, langCode);
+
+                // store all the language names/ codes in an arrayList -> check if the language exists in the system db and add the languages
+                // only if not available in the db
+
             }
             return null;
         }
