@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "lk.dinuka.translate"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -28,6 +28,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // IBM translator & text-to-speech
+    implementation 'com.ibm.watson:ibm-watson:8.3.0'            // IBM api
     implementation 'com.ibm.watson.developer_cloud:android-sdk:0.5.2'
     implementation ('com.ibm.watson:ibm-watson:8.2.1') {exclude group: 'com.google.code.findbugs', module: 'annotations'}
 
