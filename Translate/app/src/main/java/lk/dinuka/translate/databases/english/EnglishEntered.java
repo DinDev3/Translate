@@ -1,4 +1,4 @@
-package lk.dinuka.translate.databases;
+package lk.dinuka.translate.databases.english;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,6 +7,8 @@ import androidx.room.TypeConverters;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lk.dinuka.translate.databases.TimestampConverter;
 
 @Entity
 public class EnglishEntered implements Serializable {

@@ -1,4 +1,4 @@
-package lk.dinuka.translate.databases;
+package lk.dinuka.translate.databases.english;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -8,6 +8,7 @@ import androidx.room.Room;
 
 import java.util.List;
 
+import lk.dinuka.translate.databases.TranslationDB;
 import lk.dinuka.translate.util.AppUtils;
 
 public class EnglishRepository {
@@ -51,17 +52,17 @@ public class EnglishRepository {
         }.execute();
     }
 
-//    public void updateTask(final EnglishEntered englishEntered) {
-//        englishEntered.setModifiedAt(AppUtils.getCurrentDateTime());
-//
-//        new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//                translationDB.englishDAO().updateTask(englishEntered);
-//                return null;
-//            }
-//        }.execute();
-//    }
+    public void updateTask(final EnglishEntered englishEntered) {
+        englishEntered.setUpdatedAt(AppUtils.getCurrentDateTime());
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                translationDB.englishDAO().updateTask(englishEntered);
+                return null;
+            }
+        }.execute();
+    }
 
 //    public void deleteTask(final int id) {
 //        final LiveData<Note> task = getTask(id);
@@ -86,9 +87,9 @@ public class EnglishRepository {
 //        }.execute();
 //    }
 
-//    public LiveData<Note> getEnglish(int id) {
-//        return noteDatabase.daoAccess().getTask(id);
-//    }
+    public LiveData<EnglishEntered> getEnglishByID(int id) {            // get a record using the id of the record
+        return translationDB.englishDAO().getEnglishByID(id);
+    }
 
     public LiveData<List<EnglishEntered>> getEnglishFromDB() {            // get all the English words/ phrases stored in the database
         return translationDB.englishDAO().fetchAllEnglish();
