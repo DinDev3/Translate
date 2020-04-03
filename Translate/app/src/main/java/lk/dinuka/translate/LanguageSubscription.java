@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckedTextView;
 
-import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.language_translator.v3.LanguageTranslator;
@@ -19,6 +17,8 @@ import com.ibm.watson.language_translator.v3.model.IdentifiableLanguage;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,9 +64,10 @@ public class LanguageSubscription extends AppCompatActivity {
         List<String> allForeignLanguages = new ArrayList<>();
 
         for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
-            allForeignLanguages.add(entry.getKey());              //adding value of selected key into playerNames arrayList
+            allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
         }
 
+        Collections.sort(allForeignLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
 
         // specify the adapter (a bridge between a UI component and a data source)
         mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
@@ -87,7 +88,7 @@ public class LanguageSubscription extends AppCompatActivity {
 
                 if (subscription != (entry.getValue())) {       // update only if the subscription status is different.
 
-                    // update this record in db ---
+                    // get this record from the db ---
 
                     final ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
 
@@ -111,8 +112,6 @@ public class LanguageSubscription extends AppCompatActivity {
                         }
 
                     });
-
-
                 }
             }
         }

@@ -25,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
     public static List<String> allEnglishFromDB = new ArrayList<>();        // holds all English data received from db
     public static HashMap<String, Boolean> foreignLanguageSubs = new HashMap<>();        // holds all Foreign subscriptions received from db with subscription status
 
-    // language codes can be stored with the name of the foreign language in a different HashMap in the translate page.
-//    public static HashMap<String, String> languageCodes = new HashMap<>();        // holds all Foreign language names with language codes
-// can call for the language code from the db? will speed decrease then??---- needed in translation page
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

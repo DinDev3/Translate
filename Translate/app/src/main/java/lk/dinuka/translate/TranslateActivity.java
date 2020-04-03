@@ -24,13 +24,18 @@ import com.ibm.watson.language_translator.v3.util.Language;
 import com.ibm.watson.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lk.dinuka.translate.databases.foreign.ForeignLanguage;
 import lk.dinuka.translate.databases.foreign.ForeignRepository;
 
 import static com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions.Voice.EN_US_LISAVOICE;
+import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
 
 public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private LanguageTranslator translationService;          // translation service
@@ -47,6 +52,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     public static HashMap<String, String> languageCodes = new HashMap<>();        // holds all Foreign language names with language codes
 
+    ArrayList<String> allSubscribedLanguages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,10 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         getLangNamesCode();
 
 
+        // create array of subscribed languages to pass into spinner
+        getAllSubscriptionsArray();
+
+
         //---------Spinner
 
         // create the spinner
@@ -70,8 +80,8 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         }
 
         // Create ArrayAdapter using the string array and default spinner layout.
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.languages_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,allSubscribedLanguages);
 
 
         // Specify the layout to use when the list of choices appears.
@@ -105,10 +115,12 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     public void pronounceTranslation(View view) {  // pronounce translated word/ phrase
 
-        textService = initTextToSpeechService();           // connect & initiate to the cloud text to speech service
+        if (translationText != null) {       // a translation should be done first
+            textService = initTextToSpeechService();           // connect & initiate to the cloud text to speech service
 
-        // speak displayed translation
-        new SynthesisTask().execute(displayTranslation.getText().toString(),EN_US_LISAVOICE);
+            // speak displayed translation
+            new SynthesisTask().execute(displayTranslation.getText().toString(), EN_US_LISAVOICE);
+        }
     }
 
 
@@ -130,6 +142,17 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
                 }
             }
         });
+    }
+
+
+    public void getAllSubscriptionsArray() {
+
+        for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
+            if (entry.getValue() == true) {     // add languages that have been subscribed to by the user
+                allSubscribedLanguages.add(entry.getKey());              //adding language name into allSubscribedLanguages arrayList
+            }
+        }
+        Collections.sort(allSubscribedLanguages);           // sorting all languages received in alphabetical order (because HashMap has no order)
     }
 
 
