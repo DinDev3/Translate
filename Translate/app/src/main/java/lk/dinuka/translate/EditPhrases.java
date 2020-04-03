@@ -2,10 +2,12 @@ package lk.dinuka.translate;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DownloadManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -30,6 +32,8 @@ public class EditPhrases extends AppCompatActivity {
         setContentView(R.layout.activity_edit_phrases);
 
         chosenText = findViewById(R.id.editText_plainText);
+
+
 
         // get all English phrases from db and display
         recyclerView = findViewById(R.id.edit_recycler_view);
@@ -61,33 +65,38 @@ public class EditPhrases extends AppCompatActivity {
     }
 
     public void updateAndSaveEnglish(View view) {
-
-        // X - remove old english phrase from db
-        // X - insert new phrase into db
         // update english in db
+
+
+        // get the ID passed in from the chosen one----------->>>>>
+
 
 
         // get one english phrase from db and display
         final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
 
+        final LiveData<EnglishEntered> englishResultObservable = englishRepository.getEnglishByID(1);
 
-        // get the ID passed in from the chosen one----------->>>>>>
-
-        englishRepository.getEnglishByID(1).observe(this, new Observer<EnglishEntered>() {
+        englishResultObservable.observe(this, new Observer<EnglishEntered>() {
             @Override
             public void onChanged(EnglishEntered englishEntered) {
-                System.out.println(englishEntered.getId());
-                System.out.println(englishEntered.getEnglish());
-                System.out.println(englishEntered.getCreatedAt());
-                System.out.println(englishEntered.getUpdatedAt());
+//                System.out.println(englishEntered.getId());     // to check whether all the data was received
+//                System.out.println(englishEntered.getEnglish());
+//                System.out.println(englishEntered.getCreatedAt());
+//                System.out.println(englishEntered.getUpdatedAt());
 
                 englishEntered.setEnglish("Hello World!");          // text to be changed
+
                 englishRepository.updateTask(englishEntered);
 
-                // this works, but repeatedly prints the details (Keeps accessing this loop)
+                englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
             }
 
-            // refresh page with new info ------------
         });
+
+
+        // refresh page with new info ------------
+
+
     }
 }
