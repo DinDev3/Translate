@@ -4,8 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+
+import com.ibm.cloud.sdk.core.http.ServiceCall;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.IamAuthenticator;
+import com.ibm.watson.language_translator.v3.LanguageTranslator;
+import com.ibm.watson.language_translator.v3.model.IdentifiableLanguage;
+import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
+
+import java.util.List;
 
 import lk.dinuka.translate.util.MyLanguageAdapter;
 
@@ -15,6 +25,8 @@ public class LanguageSubscription extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private LanguageTranslator translationService;          // translation service
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +34,11 @@ public class LanguageSubscription extends AppCompatActivity {
 
         // get and display all foreign languages stored in a separate database (foreignLanguagesDB?)
         // with boolean value of subscribed
+
+
+        // translate using Watson Translator
+        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+        new LanguageSubscription.ReceiveIdentifiableLanguages().execute();
 
 
         recyclerView = findViewById(R.id.language_sub_recycler_view);
@@ -45,5 +62,28 @@ public class LanguageSubscription extends AppCompatActivity {
         // save boolean statuses of all changed languages
         // take new changes into a HashMap and change only those in the db?
 
+    }
+
+    private class ReceiveIdentifiableLanguages extends AsyncTask<String, Void, String> {     // get all available languages form the API at the beginning
+
+        @Override
+        protected String doInBackground(String... strings) {
+            IdentifiableLanguages languages = translationService.listIdentifiableLanguages()
+                    .execute().getResult();
+
+            System.out.println(languages);
+
+            return null;
+        }
+    }
+
+    private LanguageTranslator initLanguageTranslatorService() {           // connect & initiate to the cloud translation service
+        IamAuthenticator authenticator = new IamAuthenticator("2daMreRDE8V5zPRO3enCVHGUCH1sQJs-Kdq8ryPn4-ij");
+
+        translationService = new LanguageTranslator("2018-05-01", authenticator);
+
+        translationService.setServiceUrl("https://api.us-south.language-translator.watson.cloud.ibm.com/instances/caf1b5bc-ff11-4271-96cf-93372088290d");
+
+        return translationService;
     }
 }
