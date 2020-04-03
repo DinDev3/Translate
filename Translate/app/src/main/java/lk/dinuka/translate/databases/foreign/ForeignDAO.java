@@ -20,9 +20,11 @@ public interface ForeignDAO {
     LiveData<List<ForeignLanguage>> fetchAllLanguages();
 
 
-    @Query("SELECT * FROM ForeignLanguage WHERE lang_id =:request_id")        // get a specified Language (specified by id here)
-    LiveData<ForeignLanguage> getLangByID(int request_id);
+//    @Query("SELECT * FROM ForeignLanguage WHERE lang_id =:request_id")        // get a specified Language (specified by id here)
+//    LiveData<ForeignLanguage> getLangByID(int request_id);
 
+    @Query("SELECT * FROM ForeignLanguage WHERE language =:lang_name")        // get a specified Language (specified by language name here)
+    LiveData<ForeignLanguage> getLangByName(String lang_name);
 
     @Update
     void updateTask(ForeignLanguage foreignLang);

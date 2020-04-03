@@ -62,8 +62,12 @@ public class ForeignRepository {
         }.execute();
     }
 
-    public LiveData<ForeignLanguage> getLangByID(int id) {            // get a record using the id of the record
-        return translationDB.foreignDAO().getLangByID(id);
+//    public LiveData<ForeignLanguage> getLangByID(int id) {            // get a record using the id of the record
+//        return translationDB.foreignDAO().getLangByID(id);
+//    }
+
+    public LiveData<ForeignLanguage> getLangByName(String langName) {            // get a record using the name of the language
+        return translationDB.foreignDAO().getLangByName(langName);
     }
 
     public LiveData<List<ForeignLanguage>> getLangsFromDB() {            // get all the languages stored in the database

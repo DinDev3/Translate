@@ -19,7 +19,7 @@ public class ForeignLanguage implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int lang_id;
 
-    private String language;         // language
+    private String language;         // language name
 
     private String languageCode;        // code of the language used by IBM Watson APIs
 

@@ -1,6 +1,8 @@
 package lk.dinuka.translate;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,9 +19,11 @@ import com.ibm.watson.language_translator.v3.model.IdentifiableLanguage;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lk.dinuka.translate.databases.foreign.ForeignLanguage;
 import lk.dinuka.translate.databases.foreign.ForeignRepository;
 import lk.dinuka.translate.util.MyLanguageAdapter;
 
@@ -31,6 +35,8 @@ public class LanguageSubscription extends AppCompatActivity {
 
     private LanguageTranslator translationService;          // translation service
 
+    public static HashMap<String, Boolean> foreignSubChanges = new HashMap<>();        // holds changes in Foreign subscriptions (languages that have been clicked by the user)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +44,11 @@ public class LanguageSubscription extends AppCompatActivity {
         setContentView(R.layout.activity_language_subscription);
 
         // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
-        // with boolean value of subscribed>>>>>>>>>>>>>>>>>>>>>>>>
-
+        // with boolean value of subscribed
 
         // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
 //        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-//        new LanguageSubscription.ReceiveIdentifiableLanguages().execute();
+//        new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
 
 
         recyclerView = findViewById(R.id.language_sub_recycler_view);
@@ -70,15 +75,52 @@ public class LanguageSubscription extends AppCompatActivity {
     }
 
 
-    public void updateLanguages(View view) {
+    public void updateLanguages(View view) {            // update database with new subscription status
         // save boolean statuses of all changed languages
-        // take new changes into a HashMap and change only those in the db?
+        // take new changes into a HashMap and change only those in the db
+//        System.out.println(foreignSubChanges);          // records the languages that the user has clicked in language adapter
 
+        for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
+            if (foreignSubChanges.containsKey(entry.getKey())) {     // if a language name is in the changes arrayList, subscription has been changed
+
+                final Boolean subscription = foreignSubChanges.get(entry.getKey());
+
+                if (subscription != (entry.getValue())) {       // update only if the subscription status is different.
+
+                    // update this record in db ---
+
+                    final ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
+
+                    final LiveData<ForeignLanguage> foreignResultObservable = foreignRepository.getLangByName(entry.getKey());
+
+                    foreignResultObservable.observe(this, new Observer<ForeignLanguage>() {
+                        @Override
+                        public void onChanged(ForeignLanguage foreignLanguage) {
+//                            System.out.println(foreignLanguage.getLang_id());     // to check whether all the data was received
+//                            System.out.println(foreignLanguage.getLanguage());
+//                            System.out.println(foreignLanguage.getLanguageCode());
+//                            System.out.println(foreignLanguage.getSubscriptionStatus());
+//                            System.out.println(foreignLanguage.getCreatedAt());
+//                            System.out.println(foreignLanguage.getUpdatedAt());
+
+                            foreignLanguage.setSubscriptionStatus(subscription);       // update subscription status
+
+                            foreignRepository.updateTask(foreignLanguage);          // update foreign language subscription status
+
+                            foreignResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
+                        }
+
+                    });
+
+
+                }
+            }
+        }
     }
 
     // --------------------------------------------------------------------
 
-    private class ReceiveIdentifiableLanguages extends AsyncTask<String, Void, String> {     // get all available languages form the API at the beginning
+    private class ReceiveIdentifiableLanguagesFromAPI extends AsyncTask<String, Void, String> {     // get all available languages form the API at the beginning
 
         @Override
         protected String doInBackground(String... strings) {
@@ -97,6 +139,7 @@ public class LanguageSubscription extends AppCompatActivity {
                 ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
                 foreignRepository.insertTask(langName, langCode);
 
+                // extra modification---
                 // store all the language names/ codes in an arrayList -> check if the language exists in the system db and add the languages
                 // only if not available in the db
 

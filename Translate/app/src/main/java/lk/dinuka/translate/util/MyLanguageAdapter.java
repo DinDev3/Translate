@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import lk.dinuka.translate.MainActivity;
 import lk.dinuka.translate.R;
+
+import static lk.dinuka.translate.LanguageSubscription.foreignSubChanges;
+import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
 
 public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.MyViewHolder> {
     private List<String> mDataset;      // list of all Languages from db will be transferred here
@@ -44,8 +48,17 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
     public void onBindViewHolder(@NonNull final MyLanguageAdapter.MyViewHolder holder, int position) {
         holder.checkedTextView.setText(mDataset.get(position));
 
-        // depending on the subscription status in the HashMap received from the database, display the check-->>>>>>>>>
 
+        Boolean subscriptionStatus = MainActivity.foreignLanguageSubs.get(mDataset.get(position));
+        // depending on the subscription status in the HashMap received from the database, display the check--
+
+        if (subscriptionStatus){
+            holder.checkedTextView.setCheckMarkDrawable(android.R.drawable.checkbox_on_background);
+            holder.checkedTextView.setChecked(true);
+        }else{
+            holder.checkedTextView.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
+            holder.checkedTextView.setChecked(false);
+        }
 
 
         // perform on Click Event Listener on CheckedTextView
@@ -69,9 +82,8 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
                 }
 
 
-                // update database and HashMap with new subscription status ----------------->>>>>>>>>>>>>>>>>>>>>>>>>
-
-
+                // update HashMap with new subscription status -----------------
+                foreignSubChanges.put(holder.checkedTextView.getText().toString(),holder.checkedTextView.isChecked());
             }
         });
     }
