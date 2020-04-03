@@ -17,6 +17,7 @@ import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
 
 import java.util.List;
 
+import lk.dinuka.translate.databases.foreign.ForeignRepository;
 import lk.dinuka.translate.util.MyLanguageAdapter;
 
 public class LanguageSubscription extends AppCompatActivity {
@@ -33,12 +34,12 @@ public class LanguageSubscription extends AppCompatActivity {
         setContentView(R.layout.activity_language_subscription);
 
         // get and display all foreign languages stored in a separate database (foreignLanguagesDB?)
-        // with boolean value of subscribed
+        // with boolean value of subscribed>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-        // translate using Watson Translator
-        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-        new LanguageSubscription.ReceiveIdentifiableLanguages().execute();
+        // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
+//        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+//        new LanguageSubscription.ReceiveIdentifiableLanguages().execute();
 
 
         recyclerView = findViewById(R.id.language_sub_recycler_view);
@@ -64,6 +65,8 @@ public class LanguageSubscription extends AppCompatActivity {
 
     }
 
+    // --------------------------------------------------------------------
+
     private class ReceiveIdentifiableLanguages extends AsyncTask<String, Void, String> {     // get all available languages form the API at the beginning
 
         @Override
@@ -71,8 +74,18 @@ public class LanguageSubscription extends AppCompatActivity {
             IdentifiableLanguages languages = translationService.listIdentifiableLanguages()
                     .execute().getResult();
 
-            System.out.println(languages);
+//            System.out.println(languages);          // to check whether all languages were received
 
+            for (int i = 0; i< languages.getLanguages().size();i++) {               // get each language code & name separately
+                String langName = languages.getLanguages().get(i).getName();      // language name
+                String langCode = languages.getLanguages().get(i).getLanguage();      // language code
+
+//                System.out.println(langName+": "+langCode);     // to check
+
+                // add each of these into the entity ForeignLanguage-------->>>>>>>>>>>>>>>>
+                ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
+                foreignRepository.insertTask(langName,langCode);
+            }
             return null;
         }
     }
