@@ -18,7 +18,9 @@ import lk.dinuka.translate.databases.english.EnglishEntered;
 import lk.dinuka.translate.databases.english.EnglishRepository;
 import lk.dinuka.translate.util.MyEditAdapter;
 
-public class EditPhrases extends AppCompatActivity {
+import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
+
+public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEditAdapterListener{
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -48,7 +50,7 @@ public class EditPhrases extends AppCompatActivity {
 
 
         // specify the adapter (a bridge between a UI component and a data source)
-        mAdapter = new MyEditAdapter(MainActivity.allEnglishFromDB);          // insert list of words here
+        mAdapter = new MyEditAdapter(allEnglishFromDB, this);          // insert list of words here
         recyclerView.setAdapter(mAdapter);
 
 
@@ -60,7 +62,9 @@ public class EditPhrases extends AppCompatActivity {
 
         //display chosen english in edit text box <- only if a phrase/ word is chosen
         if (chosenPhrase != null) {
-
+            chosenText.setText(chosenPhrase);
+        }else{
+            System.out.println("asjdfoauwgjsdf0934ujrfi");
         }
 
     }
@@ -70,6 +74,15 @@ public class EditPhrases extends AppCompatActivity {
 
 
         // get the ID passed in from the chosen one----------->>>>>
+
+
+
+// get id from english chosen into a variable
+
+        //get change in text from text currently in EditText box
+
+
+        //pass these two into the following update call---------------
 
 
 
@@ -98,6 +111,13 @@ public class EditPhrases extends AppCompatActivity {
 
         // refresh page with new info ------------
 
+
+    }
+
+    @Override
+    public void onEnglishClick(int position) { // get English word/ phrase to be translated - onClick of a recyclerView view holder
+        chosenPhrase = allEnglishFromDB.get(position);           // same position as in the Adapter
+        System.out.println(chosenPhrase);          // translation text
 
     }
 }
