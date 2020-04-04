@@ -91,6 +91,10 @@ public class EnglishRepository {
         return translationDB.englishDAO().getEnglishByID(id);
     }
 
+    public LiveData<EnglishEntered> getEnglishByEnglish(String englishSearched) {            // get a record using the english phrase of the record
+        return translationDB.englishDAO().getEnglishByEnglish(englishSearched);
+    }
+
     public LiveData<List<EnglishEntered>> getEnglishFromDB() {            // get all the English words/ phrases stored in the database
         return translationDB.englishDAO().fetchAllEnglish();
     }

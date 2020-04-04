@@ -25,6 +25,10 @@ public interface EnglishDAO {
     LiveData<EnglishEntered> getEnglishByID(int id);
 
 
+    @Query("SELECT * FROM EnglishEntered WHERE english =:englishSearched")        // get a specified English word (specified by english phrase here)
+    LiveData<EnglishEntered> getEnglishByEnglish(String englishSearched);
+
+
     @Update
     void updateTask(EnglishEntered englishEntered);
 
