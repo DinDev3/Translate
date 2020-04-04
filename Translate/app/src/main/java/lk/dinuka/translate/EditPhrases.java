@@ -30,7 +30,7 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
 
     private EditText chosenEditText;
     String chosenPhrase;             // stores the chosen English word/ phrase to be edited
-    //    int chosenIDInDB;             // id of the chosenPhrase in the database
+    int chosenPosition;             // id of the chosenPhrase in the recyclerview. Used to update recyclerview
     Boolean isEdit = false;                 // used to check whether the edit button has been pressed at least once
 
     @Override
@@ -95,10 +95,10 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
             englishResultObservable.observe(this, new Observer<EnglishEntered>() {
                 @Override
                 public void onChanged(EnglishEntered englishEntered) {
-                    System.out.println(englishEntered.getId());     // to check whether all the data was received
-                    System.out.println(englishEntered.getEnglish());
-                    System.out.println(englishEntered.getCreatedAt());
-                    System.out.println(englishEntered.getUpdatedAt());
+//                    System.out.println(englishEntered.getId());     // to check whether all the data was received correctly
+//                    System.out.println(englishEntered.getEnglish());
+//                    System.out.println(englishEntered.getCreatedAt());
+//                    System.out.println(englishEntered.getUpdatedAt());
 
                     englishEntered.setEnglish(updatedPhrase);          // text to be changed
 
@@ -114,10 +114,15 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
         }
 
         // refresh page with new info ------------
-//        refreshData();              // refresh the data----- refreshing happens before update is over. Old record comes back in
-        // Therefore, non existant in db the next time
+        chosenPhrase = updatedPhrase;           // to ensure that if the user changes the same phrase,
+                                                // the db can be queried with the new phrase
 
+        // position in adapter remains unchanged as received, since only an update is done
+        allEnglishFromDB.remove(chosenPosition);        // remove currently existing record (old phrase before updating)
+        allEnglishFromDB.add(chosenPosition, updatedPhrase);
 
+        // notify adapter
+        mAdapter.notifyItemChanged(chosenPosition);
     }
 
     @Override
@@ -125,40 +130,13 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
         chosenPhrase = allEnglishFromDB.get(position);           // same position as in the Adapter
 //        System.out.println(chosenPhrase);          // translation text
 
+        chosenPosition = position;      // used to update recycler view
+
         // this is the position in the recyclerview. These records are queried in alphabetical order.
         // Therefore, can't get the id in the db from here
 
         if (isEdit) {
             chosenEditText.setText(chosenPhrase);           // display chosen text in plainTextView
         }
-    }
-
-    public void refreshData() {
-        //       --------------------------------------------------------------------------------------------
-        // this is placed here so that whenever new words are added, when coming back to the Main Screen and
-        // going to a display words screen, the list of words get updated.
-
-        // get all english phrases from db and display
-        EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
-
-        englishRepository.getEnglishFromDB().observe(this, new Observer<List<EnglishEntered>>() {
-            @Override
-            public void onChanged(@Nullable List<EnglishEntered> allEnglish) {
-                allEnglishFromDB.clear();           // clearing existing data
-                for (EnglishEntered english : allEnglish) {
-                    allEnglishFromDB.add(english.getEnglish());     // saving all english word/ phrases received
-
-//                     can use these to check data of received records in console
-                    System.out.println("-----------------------");
-                    System.out.println(english.getId());
-                    System.out.println(english.getEnglish());
-                    System.out.println(english.getCreatedAt());
-                    System.out.println(english.getUpdatedAt());
-                }
-            }
-        });
-
-
-//        mAdapter.notifyDataSetChanged();      // get the adapter to show changes
     }
 }
