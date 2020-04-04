@@ -10,4 +10,5 @@
     <string name="select_a_word_to_edit_text">Select a Word to Edit</string>
     <string name="edit_text">Edit</string>
     <string name="update_text">Update</string>
+    <string name="clear_button_text">Clear</string>
 </resources>

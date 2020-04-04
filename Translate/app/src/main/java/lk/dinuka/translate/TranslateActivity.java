@@ -1,11 +1,16 @@
 package lk.dinuka.translate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +30,6 @@ import com.ibm.watson.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,17 +37,23 @@ import java.util.Map;
 
 import lk.dinuka.translate.databases.foreign.ForeignLanguage;
 import lk.dinuka.translate.databases.foreign.ForeignRepository;
+import lk.dinuka.translate.util.MyTranslateAdapter;
 
 import static com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions.Voice.EN_US_LISAVOICE;
-import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
+import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 
-public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, MyTranslateAdapter.OnTransAdapterListener {
+
+    private static final String TAG = "~*~*~*~*~*~";
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
     private LanguageTranslator translationService;          // translation service
     private TextToSpeech textService;           // Text to speech service
 
-
     private String translationLanguageCode;             // used to pass in the translation code of the chosen language
-    private String translationText;                     // The English text that is required to be translated
+    private String translationText;                     // The English text that is required to be translated will be held in this variable
     private TextView displayTranslation;
     public String selectedSpinnerLanguage;         // holds the translation language Name chosen from the spinner
 
@@ -81,7 +91,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
         // Create ArrayAdapter using the string array and default spinner layout.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,allSubscribedLanguages);
+                android.R.layout.simple_spinner_item, allSubscribedLanguages);
 
 
         // Specify the layout to use when the list of choices appears.
@@ -92,6 +102,26 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         if (spinner != null) {
             spinner.setAdapter(adapter);
         }
+
+
+        //--------Create Recycler view to display all phrases
+
+        // get all English phrases from db and display
+        recyclerView = findViewById(R.id.translate_recycler_view);
+
+
+        recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
+
+        // Use a linear layout within the recycler view
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+        // specify the adapter (a bridge between a UI component and a data source)
+        mAdapter = new MyTranslateAdapter(allEnglishFromDB, this);          // insert list of words here
+        recyclerView.setAdapter(mAdapter);
+
+
     }
 
 
@@ -102,14 +132,16 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         translationLanguageCode = languageCodes.get(selectedSpinnerLanguage);
 
 
-        // get English word/ phrase to be translated---------->>>>>>>>>>>>>>>>>>>
-//        translationText = findViewById(R.id.);
-        translationText = "Hello World";
+//        translationText = "Hello World";          // hard coded dummy value for testing
+        if (translationText != null) {
 
+            // translate using Watson Translator
+            translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+            new TranslationTask().execute(translationText, translationLanguageCode);
 
-        // translate using Watson Translator
-        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-        new TranslationTask().execute(translationText, translationLanguageCode);
+        } else{
+            displayToast("Choose a word/ phrase to be translated");
+        }
 
     }
 
@@ -125,10 +157,11 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
 
     // ---------------------
-//    public void displayToast(String message) {
-//        Toast.makeText(getApplicationContext(), message,
-//                Toast.LENGTH_SHORT).show();
-//    }
+    public void displayToast(String message) {
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT).show();
+    }
+
 
     public void getLangNamesCode() {
         // get all foreign languages from db. Extract language name & subscription status
@@ -164,9 +197,19 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 
+
+    @Override
+    public void onEnglishClick(int position) {  // get English word/ phrase to be translated - onClick of a recyclerView view holder
+//        Log.d(TAG, "onEnglishClick: clicked");
+//        System.out.println(position);
+        translationText = allEnglishFromDB.get(position);           // same position as in the Adapter
+//        System.out.println(translationText);          // translation text
+    }
+
+
+    //-------------------
 
     private LanguageTranslator initLanguageTranslatorService() {           // connect & initiate to the cloud translation service
         Authenticator authenticator = new IamAuthenticator("2daMreRDE8V5zPRO3enCVHGUCH1sQJs-Kdq8ryPn4-ij");
@@ -219,7 +262,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         protected String doInBackground(String... params) {
             SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
                     .text(params[0])            // only one String parameter is entered. This is the translated text.
-                    .voice(EN_US_LISAVOICE)     // ------>>>>>>this will speak out only in English. params[1] can be used to get translated language
+                    .voice(EN_US_LISAVOICE)     // ------this will speak out only in English. params[1] can be used to use a different language
                     .accept(HttpMediaType.AUDIO_WAV)
                     .build();
             player.playStream(textService.synthesize(synthesizeOptions).execute().getResult());

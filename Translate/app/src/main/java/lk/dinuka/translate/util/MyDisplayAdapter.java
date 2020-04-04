@@ -15,18 +15,6 @@ import lk.dinuka.translate.R;
 public class MyDisplayAdapter extends RecyclerView.Adapter<MyDisplayAdapter.MyViewHolder> {
     private List<String> mDataset;      // list of all english from db will be transferred here
 
-    // Provide a reference to the views for each data item
-    // provide access to all the views for a data item in a view holder
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
-
-        public TextView textView;       // each data item has a String
-        public MyViewHolder(@NonNull View itemView) {       // constructor of individual view element
-            super(itemView);
-
-            textView =  itemView.findViewById(R.id.text_display_line);
-        }
-
-    }
 
     // constructor of adapter
     public MyDisplayAdapter(List<String> myDataset) {
@@ -40,7 +28,7 @@ public class MyDisplayAdapter extends RecyclerView.Adapter<MyDisplayAdapter.MyVi
         // Create new views (invoked by the layout manager)
 
         // create a new view
-        View v =  LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_display_text_view, parent, false);
 
         MyViewHolder vh = new MyViewHolder(v);
@@ -64,4 +52,18 @@ public class MyDisplayAdapter extends RecyclerView.Adapter<MyDisplayAdapter.MyVi
         return mDataset.size();
     }
 
+
+    // Provide a reference to the views for each data item
+    // provide access to all the views for a data item in a view holder
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView textView;       // each data item has a String
+
+        public MyViewHolder(@NonNull View itemView) {       // constructor of individual view element
+            super(itemView);
+
+            textView = itemView.findViewById(R.id.text_display_line);
+        }
+
+    }
 }
