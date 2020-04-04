@@ -52,6 +52,9 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         // this condition un-checks previous selections
         holder.selectionState.setChecked(lastSelectedPosition == position);
 
+        //-------------->>>>>>> send chosen word/phrase to main activity
+
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -71,7 +74,7 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         public MyViewHolder(@NonNull View itemView) {       // constructor of individual view element
             super(itemView);
 
-            textView = itemView.findViewById(R.id.text_display_line);
+            textView = itemView.findViewById(R.id.editText_display_line);
             selectionState = itemView.findViewById(R.id.radio_selection_english);
 
             textView.setOnClickListener(new View.OnClickListener() {            // choose radio if text is clicked

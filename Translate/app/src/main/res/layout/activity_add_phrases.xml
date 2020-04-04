@@ -32,4 +32,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enter_to_save_multiText" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="55dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/clear_button_text"
+        android:onClick="clearText"
+        android:textAllCaps="false"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/enter_to_save_multiText"
+        app:layout_constraintStart_toEndOf="@+id/enter_to_save_multiText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

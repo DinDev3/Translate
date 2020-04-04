@@ -25,6 +25,7 @@ public class EditPhrases extends AppCompatActivity {
 
     private EditText chosenText;
     String chosenPhrase;             // stores the chosen English word/ phrase to be edited
+//    Boolean isEdit;                 // used to check whether the edit button has been pressed at least once
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

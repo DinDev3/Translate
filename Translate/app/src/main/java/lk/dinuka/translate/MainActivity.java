@@ -17,7 +17,6 @@ import lk.dinuka.translate.databases.english.EnglishEntered;
 import lk.dinuka.translate.databases.english.EnglishRepository;
 import lk.dinuka.translate.databases.foreign.ForeignLanguage;
 import lk.dinuka.translate.databases.foreign.ForeignRepository;
-//import lk.dinuka.translate.databases.foreign.ForeignRepository;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 for (EnglishEntered english : allEnglish) {
                     allEnglishFromDB.add(english.getEnglish());     // saving all english word/ phrases received
 
-//                     can use these to check in console
+//                     can use these to check data of received records in console
 //                    System.out.println("-----------------------");
 //                    System.out.println(english.getId());
 //                    System.out.println(english.getEnglish());
