@@ -20,11 +20,12 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
     private List<String> mDataset;      // list of all english from db will be transferred here
 
     private int lastSelectedPosition = -1;      // stores the radio selection position
-
+    private OnEditAdapterListener onEditAdapterListener;
 
     // constructor of adapter
-    public MyEditAdapter(List<String> myDataset) {
+    public MyEditAdapter(List<String> myDataset, OnEditAdapterListener onEditAdapterListener) {
         mDataset = myDataset;           // getting received english from db
+        this.onEditAdapterListener = onEditAdapterListener;
     }
 
 
@@ -37,7 +38,7 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_edit_text_view, parent, false);
 
-        MyViewHolder vh = new MyViewHolder(v);
+        MyViewHolder vh = new MyViewHolder(v, onEditAdapterListener);
         return vh;
     }
 
@@ -66,36 +67,52 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
 
     // Provide a reference to the views for each data item
     // provide access to all the views for a data item in a view holder
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView textView;       // each data item has a String
         public RadioButton selectionState;
+        OnEditAdapterListener onEditAdapterListener;      // adding the interface to the view holder
 
-        public MyViewHolder(@NonNull View itemView) {       // constructor of individual view element
+
+        public MyViewHolder(@NonNull View itemView, OnEditAdapterListener onEditAdapterListener) {       // constructor of individual view element
             super(itemView);
+            this.onEditAdapterListener = onEditAdapterListener;
 
             textView = itemView.findViewById(R.id.editText_display_line);
             selectionState = itemView.findViewById(R.id.radio_selection_english);
 
-            textView.setOnClickListener(new View.OnClickListener() {            // choose radio if text is clicked
-                @Override
-                public void onClick(View view) {
-                    lastSelectedPosition = getAdapterPosition();
-                    notifyDataSetChanged();
-                }
-            });
+//            textView.setOnClickListener(new View.OnClickListener() {            // choose radio if text is clicked
+//                @Override
+//                public void onClick(View view) {
+//                    lastSelectedPosition = getAdapterPosition();
+//                    notifyDataSetChanged();
+//                }
+//            });
+//
+//            selectionState.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    lastSelectedPosition = getAdapterPosition();
+//                    notifyDataSetChanged();
+//
+////                    System.out.println(lastSelectedPosition);         // test whether desired radio was selected
+////                    System.out.println(textView.getText());
+//                }
+//            });
 
-            selectionState.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    lastSelectedPosition = getAdapterPosition();
-                    notifyDataSetChanged();
-
-//                    System.out.println(lastSelectedPosition);         // test whether desired radio was selected
-//                    System.out.println(textView.getText());
-                }
-            });
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View view) {
+            lastSelectedPosition = getAdapterPosition();
+            onEditAdapterListener.onEnglishClick(getAdapterPosition());    //calling onEnglishClick and passing in the adapter position
+            notifyDataSetChanged();
+        }
+    }
+
+
+    public interface OnEditAdapterListener {
+        void onEnglishClick(int position);
     }
 }
