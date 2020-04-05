@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1F505BE4"
     tools:context=".MainActivity">
 
     <ImageView
@@ -27,7 +28,7 @@
 
         <Button
             android:id="@+id/add_phrases_button"
-            android:layout_width="200dp"
+            android:layout_width="210dp"
             android:layout_height="50dp"
             android:layout_marginTop="28dp"
             android:backgroundTint="#FFFFFF"
@@ -40,7 +41,7 @@
 
         <Button
             android:id="@+id/display_phrases_button"
-            android:layout_width="200dp"
+            android:layout_width="210dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#FFFFFF"
@@ -53,7 +54,7 @@
 
         <Button
             android:id="@+id/edit_phrases_button"
-            android:layout_width="200dp"
+            android:layout_width="210dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#FFFFFF"
@@ -66,7 +67,7 @@
 
         <Button
             android:id="@+id/language_subscription_button"
-            android:layout_width="200dp"
+            android:layout_width="210dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#FFFFFF"
@@ -79,7 +80,7 @@
 
         <Button
             android:id="@+id/translate_button"
-            android:layout_width="200dp"
+            android:layout_width="210dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#FFFFFF"

@@ -82,21 +82,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        refreshData();      // reload updated data from db into allEnglishFromDB arrayList if there were any changes in data
+        refreshData();      // load data from db into allEnglishFromDB arrayList
 
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//
-//    }
 
     public void refreshData() {
         //       --------------------------------------------------------------------------------------------
@@ -114,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     allEnglishFromDB.add(english.getEnglish());     // saving all english word/ phrases received
 
 //                     can use these to check data of received records in console
-//                    System.out.println("-----------------------");
+//                    System.out.println("-----------------------1");
 //                    System.out.println(english.getId());
 //                    System.out.println(english.getEnglish());
 //                    System.out.println(english.getCreatedAt());
@@ -133,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<ForeignLanguage> allLangs) {
                 foreignLanguageSubs.clear();           // clearing existing data
                 for (ForeignLanguage language : allLangs) {
+//                    System.out.println("-----------------------2");
+
                     if (language.getSubscriptionStatus() != foreignLanguageSubs.get(language.getLanguage()))
                         foreignLanguageSubs.put(language.getLanguage(), language.getSubscriptionStatus());     // get the subscription status of the language saved in the db
                 }

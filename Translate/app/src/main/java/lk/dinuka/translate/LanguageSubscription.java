@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
@@ -108,16 +109,25 @@ public class LanguageSubscription extends AppCompatActivity {
 
                             foreignRepository.updateTask(foreignLanguage);          // update foreign language subscription status
 
+                            MainActivity.foreignLanguageSubs.put(foreignLanguage.getLanguage(), subscription);       // update HashMap storing subscription statuses
+
                             foreignResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
                         }
 
                     });
+                    displayToast("The new subscriptions have been saved.");
+                } else {
+                    displayToast("No changes have been made to subscriptions.");
                 }
             }
         }
     }
 
     // --------------------------------------------------------------------
+    public void displayToast(String message) {
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT).show();
+    }
 
     private class ReceiveIdentifiableLanguagesFromAPI extends AsyncTask<String, Void, String> {     // get all available languages form the API at the beginning
 

@@ -24,9 +24,10 @@ public class AddPhrases extends AppCompatActivity {
         // add this to the db
         String english = enterEnglish.getText().toString();
 
-        if (english.length() > 0) {             // there should be atleast one letter to add into the db
+        if (english.length() > 0) {             // there should be at least one letter to add into the db
             EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
-            englishRepository.insertTask(english);
+            englishRepository.insertTask(english);          // insert new phrase into db
+            MainActivity.allEnglishFromDB.add(english);     // update arrayList of of all phrases
             displayToast("The newly entered text was saved.");
 
         } else {
