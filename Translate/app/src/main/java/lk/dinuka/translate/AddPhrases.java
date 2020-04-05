@@ -22,11 +22,16 @@ public class AddPhrases extends AppCompatActivity {
 
     public void saveEnteredEnglish(View view) {
         // add this to the db
-        EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
         String english = enterEnglish.getText().toString();
-        englishRepository.insertTask(english);
 
-        displayToast("The newly entered text was saved.");
+        if (english.length() > 0) {             // there should be atleast one letter to add into the db
+            EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
+            englishRepository.insertTask(english);
+            displayToast("The newly entered text was saved.");
+
+        } else {
+            displayToast("The phrase must have at least one character");
+        }
     }
 
     public void clearText(View view) {

@@ -6,66 +6,90 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="212dp"
+        android:layout_height="427dp"
+        android:contentDescription="@string/multi_language_convo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/mainback" />
+
     <LinearLayout
         android:id="@+id/main_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/add_phrases_button"
-            android:layout_width="250dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="28dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/add_phrases_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/display_phrases_button"
-            android:layout_width="250dp"
-
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/display_phrases_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_phrases_button" />
 
         <Button
             android:id="@+id/edit_phrases_button"
-            android:layout_width="250dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/edit_phrases_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/display_phrases_button" />
 
         <Button
             android:id="@+id/language_subscription_button"
-            android:layout_width="250dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/language_subscription_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_phrases_button" />
 
         <Button
             android:id="@+id/translate_button"
-            android:layout_width="250dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/translate_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/language_subscription_button" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

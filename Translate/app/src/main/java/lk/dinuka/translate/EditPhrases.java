@@ -81,48 +81,53 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
     public void updateAndSaveEnglish(View view) {
         // update english in db
 
-        //get change in text from text currently in EditText box
-        final String updatedPhrase = chosenEditText.getText().toString();
-        System.out.println(updatedPhrase);            // to test
+        if(chosenPhrase!=null) {
+            //get change in text from text currently in EditText box
+            final String updatedPhrase = chosenEditText.getText().toString();
+            System.out.println(updatedPhrase);            // to test
 
-        if (updatedPhrase.length() != 0) {              // The phrase/ word has to be replaced with another. Can't be emptied
+            if (updatedPhrase.length() != 0) {              // The phrase/ word has to be replaced with another. Can't be emptied
 
-            // get one english phrase from db and display
-            final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
+                // get one english phrase from db and display
+                final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
 
-            final LiveData<EnglishEntered> englishResultObservable = englishRepository.getEnglishByEnglish(chosenPhrase);
+                final LiveData<EnglishEntered> englishResultObservable = englishRepository.getEnglishByEnglish(chosenPhrase);
 
-            englishResultObservable.observe(this, new Observer<EnglishEntered>() {
-                @Override
-                public void onChanged(EnglishEntered englishEntered) {
+                englishResultObservable.observe(this, new Observer<EnglishEntered>() {
+                    @Override
+                    public void onChanged(EnglishEntered englishEntered) {
 //                    System.out.println(englishEntered.getId());     // to check whether all the data was received correctly
 //                    System.out.println(englishEntered.getEnglish());
 //                    System.out.println(englishEntered.getCreatedAt());
 //                    System.out.println(englishEntered.getUpdatedAt());
 
-                    englishEntered.setEnglish(updatedPhrase);          // text to be changed
+                        englishEntered.setEnglish(updatedPhrase);          // text to be changed
 
-                    englishRepository.updateTask(englishEntered);       // update record
+                        englishRepository.updateTask(englishEntered);       // update record
 
-                    englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
-                }
+                        englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
+                    }
 
-            });
+                });
 
-        } else {
-            displayToast("The phrase must have at least one character");
+                // refresh page with new info ------------
+                chosenPhrase = updatedPhrase;           // to ensure that if the user changes the same phrase,
+                // the db can be queried with the new phrase
+
+                // position in adapter remains unchanged as received, since only an update is done
+                allEnglishFromDB.remove(chosenPosition);        // remove currently existing record (old phrase before updating)
+                allEnglishFromDB.add(chosenPosition, updatedPhrase);
+
+                // notify adapter
+                mAdapter.notifyItemChanged(chosenPosition);
+
+
+            } else {
+                displayToast("The phrase must have at least one character");
+            }
+        } else{
+            displayToast("Choose a word/ phrase to be translated");
         }
-
-        // refresh page with new info ------------
-        chosenPhrase = updatedPhrase;           // to ensure that if the user changes the same phrase,
-                                                // the db can be queried with the new phrase
-
-        // position in adapter remains unchanged as received, since only an update is done
-        allEnglishFromDB.remove(chosenPosition);        // remove currently existing record (old phrase before updating)
-        allEnglishFromDB.add(chosenPosition, updatedPhrase);
-
-        // notify adapter
-        mAdapter.notifyItemChanged(chosenPosition);
     }
 
     @Override

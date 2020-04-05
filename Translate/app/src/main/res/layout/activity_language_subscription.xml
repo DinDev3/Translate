@@ -19,8 +19,12 @@
         android:id="@+id/button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/update_text"
+        android:backgroundTint="@color/colorPrimary"
         android:onClick="updateLanguages"
+        android:text="@string/update_text"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

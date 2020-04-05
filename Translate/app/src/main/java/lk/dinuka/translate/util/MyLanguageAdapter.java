@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -53,10 +54,10 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
         // depending on the subscription status in the HashMap received from the database, display the check--
 
         if (subscriptionStatus){
-            holder.checkedTextView.setCheckMarkDrawable(android.R.drawable.checkbox_on_background);
+            holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
             holder.checkedTextView.setChecked(true);
         }else{
-            holder.checkedTextView.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
+            holder.checkedTextView.setCheckMarkDrawable(null);
             holder.checkedTextView.setChecked(false);
         }
 
@@ -69,14 +70,14 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
                 if (value) {
                     // set check mark drawable and set checked property to false
 
-                    holder.checkedTextView.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
+                    holder.checkedTextView.setCheckMarkDrawable(null);
                     holder.checkedTextView.setChecked(false);
 //                    Toast.makeText(context, "un-Checked", Toast.LENGTH_LONG).show();
                 } else {
                     // set check mark drawable and set checked property to true
 
 //                    holder.checkedTextView.setCheckMarkDrawable(R.drawable.checked);
-                    holder.checkedTextView.setCheckMarkDrawable(android.R.drawable.checkbox_on_background);
+                    holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
                     holder.checkedTextView.setChecked(true);
 //                    Toast.makeText(context, "Checked", Toast.LENGTH_LONG).show();
                 }

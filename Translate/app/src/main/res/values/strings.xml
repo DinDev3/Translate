@@ -11,4 +11,6 @@
     <string name="edit_text">Edit</string>
     <string name="update_text">Update</string>
     <string name="clear_button_text">Clear</string>
+    <string name="image_of_person_speaking">Image of person speaking</string>
+    <string name="multi_language_convo">Multi language conversation</string>
 </resources>

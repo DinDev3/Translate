@@ -24,9 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/save_button"
+        android:backgroundTint="@color/colorPrimary"
         android:onClick="saveEnteredEnglish"
+        android:text="@string/save_button"
         android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryLight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,11 +39,24 @@
         android:layout_width="55dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:text="@string/clear_button_text"
+        android:backgroundTint="@color/colorAccent"
         android:onClick="clearText"
+        android:text="@string/clear_button_text"
         android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="12sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/enter_to_save_multiText"
         app:layout_constraintStart_toEndOf="@+id/enter_to_save_multiText" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="392dp"
+        android:layout_height="284dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:srcCompat="@drawable/addback" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

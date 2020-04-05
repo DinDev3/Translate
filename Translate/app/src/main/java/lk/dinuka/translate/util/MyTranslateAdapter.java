@@ -1,6 +1,7 @@
 package lk.dinuka.translate.util;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -51,10 +53,10 @@ public class MyTranslateAdapter extends RecyclerView.Adapter<MyTranslateAdapter.
 
         // supposed to colour only the chosen position
         if (position == lastSelectedPosition) {
-            holder.relativeLayout.setBackgroundColor(Color.YELLOW);         // use this only if position is the chosen position
+            holder.relativeLayout.setBackgroundColor(Color.parseColor("#A7DAFF"));         // use this only if position is the chosen position
 
         } else {
-            holder.relativeLayout.setBackgroundColor(Color.WHITE);         // use this only if position is the chosen position
+            holder.relativeLayout.setBackground(ContextCompat.getDrawable(holder.relativeLayout.getContext(), R.drawable.border));         // use this only if position is the chosen position
         }
     }
 
