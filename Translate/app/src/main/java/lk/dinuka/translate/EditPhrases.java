@@ -9,12 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DownloadManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.annotations.Since;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lk.dinuka.translate.databases.english.EnglishEntered;
@@ -25,7 +28,7 @@ import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 
 public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEditAdapterListener {
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MyEditAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private EditText chosenEditText;
@@ -56,6 +59,26 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
         mAdapter = new MyEditAdapter(allEnglishFromDB, this);          // insert list of words here
         recyclerView.setAdapter(mAdapter);
 
+        // -----------------------
+
+        // search box functionality
+//        EditText searchText = findViewById(R.id.search_box);
+//        searchText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {           // Editable editable is basically the content of the EditText
+//                filter(editable.toString());
+//            }
+//        });
 
     }
 
@@ -146,4 +169,14 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
             chosenEditText.setText(chosenPhrase);           // display chosen text in plainTextView
         }
     }
+
+//    private void filter(String filterText) {            // every time a letter is input into the search-box, this method is called
+//        ArrayList<String> filteredPhraseList = new ArrayList<>();
+//        for (String enteredSearch : MainActivity.allEnglishFromDB) {
+//            if (enteredSearch.toLowerCase().contains(filterText.toLowerCase())) {     // if entered text is contained in the phrases
+//                filteredPhraseList.add(enteredSearch);
+//            }
+//        }
+//        mAdapter.filteredResults(filteredPhraseList);        // sending filtered list into adapter
+//    }
 }

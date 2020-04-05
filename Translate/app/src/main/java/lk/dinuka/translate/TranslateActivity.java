@@ -41,7 +41,7 @@ import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 
 public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, MyTranslateAdapter.OnTransAdapterListener {
 
-    private static final String TAG = "~*~*~*~*~*~";
+//    private static final String TAG = "~*~*~*~*~*~";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
