@@ -121,12 +121,14 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
                 // notify adapter
                 mAdapter.notifyItemChanged(chosenPosition);
 
+                displayToast("The phrase has been updated.");
+
 
             } else {
                 displayToast("The phrase must have at least one character");
             }
         } else{
-            displayToast("Choose a word/ phrase to be translated");
+            displayToast("Choose a word/ phrase to be edited");
         }
     }
 
