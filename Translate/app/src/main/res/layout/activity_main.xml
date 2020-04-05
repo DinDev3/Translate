@@ -21,7 +21,10 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginTop="28dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/add_phrases_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,10 +32,12 @@
         <Button
             android:id="@+id/display_phrases_button"
             android:layout_width="250dp"
-
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/display_phrases_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_phrases_button" />
@@ -42,7 +47,10 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/edit_phrases_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/display_phrases_button" />
@@ -52,7 +60,10 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/language_subscription_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_phrases_button" />
@@ -62,7 +73,10 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
             android:text="@string/translate_text"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/language_subscription_button" />

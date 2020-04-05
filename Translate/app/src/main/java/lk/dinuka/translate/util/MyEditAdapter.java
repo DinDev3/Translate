@@ -1,7 +1,5 @@
 package lk.dinuka.translate.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +51,6 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         // this condition un-checks previous selections
         holder.selectionState.setChecked(lastSelectedPosition == position);
 
-        //-------------->>>>>>> send chosen word/phrase to main activity
 
 
     }
@@ -81,25 +78,6 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
             textView = itemView.findViewById(R.id.editText_display_line);
             selectionState = itemView.findViewById(R.id.radio_selection_english);
 
-//            textView.setOnClickListener(new View.OnClickListener() {            // choose radio if text is clicked
-//                @Override
-//                public void onClick(View view) {
-//                    lastSelectedPosition = getAdapterPosition();
-//                    notifyDataSetChanged();
-//                }
-//            });
-//
-//            selectionState.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    lastSelectedPosition = getAdapterPosition();
-//                    notifyDataSetChanged();
-//
-////                    System.out.println(lastSelectedPosition);         // test whether desired radio was selected
-////                    System.out.println(textView.getText());
-//                }
-//            });
-
             itemView.setOnClickListener(this);
         }
 
@@ -113,6 +91,6 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
 
 
     public interface OnEditAdapterListener {
-        void onEnglishClick(int position);
+        void onEnglishClick(int position);        //-------------- send chosen word/phrase to main activity
     }
 }
