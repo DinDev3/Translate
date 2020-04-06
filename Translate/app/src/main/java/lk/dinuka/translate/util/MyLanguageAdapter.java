@@ -22,7 +22,7 @@ import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
 public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.MyViewHolder> {
     private List<String> mDataset;      // list of all Languages from db will be transferred here
 
-    private int lastSelectedPosition = -1;      // stores the checkTextView selection position
+//    private int lastSelectedPosition = -1;      // stores the checkTextView selection position
 
 
     public MyLanguageAdapter(List<String> allForeignLanguages) {
@@ -53,12 +53,26 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
         Boolean subscriptionStatus = MainActivity.foreignLanguageSubs.get(mDataset.get(position));
         // depending on the subscription status in the HashMap received from the database, display the check--
 
-        if (subscriptionStatus){
+        // if changes were made to the subscription before rotation of device,
+        Boolean subscriptionChanged = foreignSubChanges.get(mDataset.get(position));
+
+
+        if (subscriptionStatus) {
             holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
             holder.checkedTextView.setChecked(true);
-        }else{
+        } else {
             holder.checkedTextView.setCheckMarkDrawable(null);
             holder.checkedTextView.setChecked(false);
+        }
+
+        if (subscriptionChanged != null) {        // only if changes were made
+            if (subscriptionChanged) {
+                holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
+                holder.checkedTextView.setChecked(true);
+            } else {
+                holder.checkedTextView.setCheckMarkDrawable(null);
+                holder.checkedTextView.setChecked(false);
+            }
         }
 
 
@@ -84,7 +98,16 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
 
 
                 // update HashMap with new subscription status -----------------
-                foreignSubChanges.put(holder.checkedTextView.getText().toString(),holder.checkedTextView.isChecked());
+                foreignSubChanges.put(holder.checkedTextView.getText().toString(), holder.checkedTextView.isChecked());
+
+                if ((foreignSubChanges.get(holder.checkedTextView.getText().toString())) ==
+                        (foreignLanguageSubs.get(holder.checkedTextView.getText().toString()))) {
+
+                    // if the final change is the same as the initially existed subscription status, the language is
+                    // removed from the subscription changes HashMap
+
+                    foreignSubChanges.remove(holder.checkedTextView.getText().toString());
+                }
             }
         });
     }

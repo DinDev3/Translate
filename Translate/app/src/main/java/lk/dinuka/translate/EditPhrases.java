@@ -1,5 +1,6 @@
 package lk.dinuka.translate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -55,8 +56,19 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
         recyclerView.setLayoutManager(layoutManager);
 
 
-        // specify the adapter (a bridge between a UI component and a data source)
-        mAdapter = new MyEditAdapter(allEnglishFromDB, this);          // insert list of words here
+        if (savedInstanceState != null) {
+            chosenPosition = savedInstanceState.getInt("chosen_position");
+
+            chosenPhrase = allEnglishFromDB.get(chosenPosition);           // same position as in the Adapter
+
+            // specify the adapter (a bridge between a UI component and a data source)
+            mAdapter = new MyEditAdapter(allEnglishFromDB, this, chosenPosition);          // insert list of words here
+        } else{
+            // specify the adapter (a bridge between a UI component and a data source)
+            mAdapter = new MyEditAdapter(allEnglishFromDB, this, -1);          // insert list of words here
+
+        }
+
         recyclerView.setAdapter(mAdapter);
 
         // -----------------------
@@ -104,7 +116,7 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
     public void updateAndSaveEnglish(View view) {
         // update english in db
 
-        if(chosenPhrase!=null) {
+        if (chosenPhrase != null) {
             //get change in text from text currently in EditText box
             final String updatedPhrase = chosenEditText.getText().toString();
             System.out.println(updatedPhrase);            // to test
@@ -150,7 +162,7 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
             } else {
                 displayToast("The phrase must have at least one character");
             }
-        } else{
+        } else {
             displayToast("Choose a word/ phrase to be edited");
         }
     }
@@ -179,4 +191,12 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
 //        }
 //        mAdapter.filteredResults(filteredPhraseList);        // sending filtered list into adapter
 //    }
+
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("chosen_position", chosenPosition);              // saving position of chosen
+    }
 }

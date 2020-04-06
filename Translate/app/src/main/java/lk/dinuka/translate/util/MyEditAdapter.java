@@ -19,14 +19,15 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
     private List<String> mDataset;      // list of all english from db will be transferred here
 //    private List<String> mFullDataset;       // holds the list of all data permanently
 
-    private int lastSelectedPosition = -1;      // stores the radio selection position
+    private int lastSelectedPosition;     // stores the radio selection position
     private OnEditAdapterListener onEditAdapterListener;
 
     // constructor of adapter
-    public MyEditAdapter(List<String> myDataset, OnEditAdapterListener onEditAdapterListener) {
+    public MyEditAdapter(List<String> myDataset, OnEditAdapterListener onEditAdapterListener, int lastSelectedPosition) {
         mDataset = myDataset;           // getting received english from db
 //        mFullDataset = mDataset;
         this.onEditAdapterListener = onEditAdapterListener;
+        this.lastSelectedPosition = lastSelectedPosition;
     }
 
 
@@ -55,9 +56,9 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         // this condition un-checks previous selections
         holder.selectionState.setChecked(lastSelectedPosition == position);
 
-        // if data set has been filtered, radio button at the same position that was chosen before filtering will be selected
-        // won't mess the database
-        /// will crash if filtered and removed the filter (last position is set to -1)
+//         if data set has been filtered, radio button at the same position that was chosen before filtering will be selected
+//         won't mess the database
+//         will crash if filtered and removed the filter (last position is set to -1)
 
     }
 

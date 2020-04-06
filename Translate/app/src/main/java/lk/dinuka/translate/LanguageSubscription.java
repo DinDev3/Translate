@@ -1,5 +1,6 @@
 package lk.dinuka.translate;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -17,6 +18,7 @@ import com.ibm.watson.language_translator.v3.LanguageTranslator;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguage;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,6 +54,9 @@ public class LanguageSubscription extends AppCompatActivity {
 //        new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
 
 
+        // ---------------------------------
+
+
         recyclerView = findViewById(R.id.language_sub_recycler_view);
 
 
@@ -74,6 +79,27 @@ public class LanguageSubscription extends AppCompatActivity {
         mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
         recyclerView.setAdapter(mAdapter);
 
+        // ---------------------------------
+
+        if (savedInstanceState != null) {
+
+            ArrayList<String> foreignLangs = new ArrayList<>();
+            boolean[] foreignSubs = new boolean[foreignSubChanges.size()];
+
+            foreignLangs = savedInstanceState.getStringArrayList("lang_changes");
+            foreignSubs = savedInstanceState.getBooleanArray("subs_changes");
+
+            if (foreignLangs != null) {
+                if (foreignSubs != null) {      // avoiding null pointer exceptions
+                    for (int i = 0; i < foreignLangs.size(); i++) {
+                        foreignSubChanges.put(foreignLangs.get(i), foreignSubs[i]);
+                    }
+                }
+            }
+//            System.out.println(foreignSubChanges);
+            mAdapter.notifyDataSetChanged();
+            // pass in this arraylist into the constructor of the adapter as well>>>>>???
+        }
     }
 
 
@@ -82,12 +108,14 @@ public class LanguageSubscription extends AppCompatActivity {
         // take new changes into a HashMap and change only those in the db
 //        System.out.println(foreignSubChanges);          // records the languages that the user has clicked in language adapter
 
-        for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
-            if (foreignSubChanges.containsKey(entry.getKey())) {     // if a language name is in the changes arrayList, subscription has been changed
+        if (foreignSubChanges.size() > 0) {
+            for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
 
-                final Boolean subscription = foreignSubChanges.get(entry.getKey());
+                if (foreignSubChanges.containsKey(entry.getKey())) {     // if a language name is in the changes arrayList, subscription has been changed
 
-                if (subscription != (entry.getValue())) {       // update only if the subscription status is different.
+                    final Boolean subscription = foreignSubChanges.get(entry.getKey());
+
+//                    if (subscription != (entry.getValue())) {       // update only if the subscription status is different.
 
                     // get this record from the db ---
 
@@ -115,11 +143,13 @@ public class LanguageSubscription extends AppCompatActivity {
                         }
 
                     });
-                    displayToast("The new subscriptions have been saved.");
-                } else {
-                    displayToast("No changes have been made to subscriptions.");
+//                    }
                 }
             }
+            displayToast("The new subscriptions have been saved.");
+
+        } else {
+            displayToast("No changes have been made to subscriptions.");
         }
     }
 
@@ -165,5 +195,25 @@ public class LanguageSubscription extends AppCompatActivity {
         translationService.setServiceUrl("https://api.us-south.language-translator.watson.cloud.ibm.com/instances/caf1b5bc-ff11-4271-96cf-93372088290d");
 
         return translationService;
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        ArrayList<String> foreignLangs = new ArrayList<>();
+        boolean[] foreignSubs = new boolean[foreignSubChanges.size()];
+
+        // create 2 ArrayLists with foreignSubChanges HashMap values in same order
+        for (Map.Entry<String, Boolean> entry : foreignSubChanges.entrySet()) {         //checking for all HashMap entries
+            foreignLangs.add(entry.getKey());
+            foreignSubs[foreignLangs.indexOf(entry.getKey())] = entry.getValue();
+        }
+
+        outState.putStringArrayList("lang_changes", foreignLangs);
+        outState.putBooleanArray("subs_changes", foreignSubs);
+
+//        System.out.println(foreignSubChanges);
     }
 }
