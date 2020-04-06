@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lk.dinuka.translate.R;
@@ -65,5 +66,10 @@ public class MyDisplayAdapter extends RecyclerView.Adapter<MyDisplayAdapter.MyVi
             textView = itemView.findViewById(R.id.text_display_line);
         }
 
+    }
+
+    public void filteredResults(ArrayList<String> filteredPhrases){         // used to filter search results
+        mDataset = filteredPhrases;     //assigning updated list after filtering
+        notifyDataSetChanged();
     }
 }

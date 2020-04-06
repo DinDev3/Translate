@@ -13,4 +13,7 @@
     <string name="clear_button_text">Clear</string>
     <string name="image_of_person_speaking">Image of person speaking</string>
     <string name="multi_language_convo">Multi language conversation</string>
+    <string name="search_phrases">Search Phrases</string>
+    <string name="copyright_text">Copyright © 2020 | Developed by Dinuka Piyadigama</string>
+    <string name="translate_convo_fun">Translate Convo fun</string>
 </resources>

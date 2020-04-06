@@ -1,5 +1,6 @@
 package lk.dinuka.translate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,7 +43,7 @@ import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 
 public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, MyTranslateAdapter.OnTransAdapterListener {
 
-    private static final String TAG = "~*~*~*~*~*~";
+    //    private static final String TAG = "~*~*~*~*~*~";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -51,7 +53,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     private String translationLanguageCode;             // used to pass in the translation code of the chosen language
     private String translationText;                     // The English text that is required to be translated will be held in this variable
-    private TextView displayTranslation;
+    private TextView mDisplayTranslation;
     public String selectedSpinnerLanguage;         // holds the translation language Name chosen from the spinner
 
     private StreamPlayer player = new StreamPlayer();
@@ -66,7 +68,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_translate);
 
-        displayTranslation = findViewById(R.id.translated_textView);        // TextView to display translation
+        mDisplayTranslation = findViewById(R.id.translated_textView);        // TextView to display translation
 
 
         // import all foreign languages list and add to temporary HashMap(for this activity) - <name, code>
@@ -114,10 +116,26 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         recyclerView.setLayoutManager(layoutManager);
 
 
-        // specify the adapter (a bridge between a UI component and a data source)
-        mAdapter = new MyTranslateAdapter(allEnglishFromDB, this);          // insert list of words here
-        recyclerView.setAdapter(mAdapter);
+        // restore the state
+        if (savedInstanceState != null) {
+            // if screen was rotated and activity was restarted
 
+            String displayedTranslationText = savedInstanceState.getString("displayed_translation_text");
+            int positionOfChosenText = savedInstanceState.getInt("chosen_position");
+            translationText = savedInstanceState.getString("translation_text");
+
+            mDisplayTranslation.setText(displayedTranslationText);
+
+
+            // specify the adapter (a bridge between a UI component and a data source)
+            mAdapter = new MyTranslateAdapter(allEnglishFromDB, this, positionOfChosenText);          // insert list of words here
+
+        }else{
+            // specify the adapter (a bridge between a UI component and a data source)
+            mAdapter = new MyTranslateAdapter(allEnglishFromDB, this, -1);          // insert list of words here
+
+        }
+        recyclerView.setAdapter(mAdapter);
 
     }
 
@@ -136,7 +154,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
             translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
             new TranslationTask().execute(translationText, translationLanguageCode);
 
-        } else{
+        } else {
             displayToast("Choose a word/ phrase to be translated");
         }
 
@@ -148,7 +166,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
             textService = initTextToSpeechService();           // connect & initiate to the cloud text to speech service
 
             // speak displayed translation
-            new SynthesisTask().execute(displayTranslation.getText().toString(), EN_US_LISAVOICE);
+            new SynthesisTask().execute(mDisplayTranslation.getText().toString(), EN_US_LISAVOICE);
         }
     }
 
@@ -197,6 +215,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
     }
 
 
+    // get clicked recycler view item position from MyTranslateAdapter
     @Override
     public void onEnglishClick(int position) {  // get English word/ phrase to be translated - onClick of a recyclerView view holder
 //        Log.d(TAG, "onEnglishClick: clicked");
@@ -239,7 +258,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         @Override
         protected void onPostExecute(String translatedText) {
             super.onPostExecute(translatedText);
-            displayTranslation.setText(translatedText);
+            mDisplayTranslation.setText(translatedText);
         }
     }
 
@@ -268,4 +287,15 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("displayed_translation_text", mDisplayTranslation.getText().toString());      // saving translated text
+
+        int position = allEnglishFromDB.indexOf(translationText);       // position of chosen text
+        outState.putInt("chosen_position", position);              // saving position of chosen
+
+        outState.putString("translation_text", translationText);        // needed to get the position when rotating back
+    }
 }

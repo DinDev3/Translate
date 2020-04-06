@@ -20,13 +20,14 @@ public class MyTranslateAdapter extends RecyclerView.Adapter<MyTranslateAdapter.
 
     private List<String> mDataset;      // list of all english from db will be transferred here
 
-    private int lastSelectedPosition = -1;      // stores the last selection position of the recycler elements in the recycler view
+    private int lastSelectedPosition;      // stores the last selection position of the recycler elements in the recycler view
     private OnTransAdapterListener onTransAdapterListener;
 
     // constructor of adapter
-    public MyTranslateAdapter(List<String> mDataset, OnTransAdapterListener onTransAdapterListener) {
+    public MyTranslateAdapter(List<String> mDataset, OnTransAdapterListener onTransAdapterListener, int lastSelectedPosition) {
         this.mDataset = mDataset;           // getting received english from db
         this.onTransAdapterListener = onTransAdapterListener;
+        this.lastSelectedPosition =  lastSelectedPosition;
     }
 
     @NonNull
@@ -98,5 +99,4 @@ public class MyTranslateAdapter extends RecyclerView.Adapter<MyTranslateAdapter.
     public interface OnTransAdapterListener{
         void onEnglishClick(int position);
     }
-
 }

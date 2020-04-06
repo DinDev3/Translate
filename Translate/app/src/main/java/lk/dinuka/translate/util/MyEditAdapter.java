@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lk.dinuka.translate.R;
@@ -16,14 +17,17 @@ import lk.dinuka.translate.R;
 public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHolder> {
 
     private List<String> mDataset;      // list of all english from db will be transferred here
+//    private List<String> mFullDataset;       // holds the list of all data permanently
 
-    private int lastSelectedPosition = -1;      // stores the radio selection position
+    private int lastSelectedPosition;     // stores the radio selection position
     private OnEditAdapterListener onEditAdapterListener;
 
     // constructor of adapter
-    public MyEditAdapter(List<String> myDataset, OnEditAdapterListener onEditAdapterListener) {
+    public MyEditAdapter(List<String> myDataset, OnEditAdapterListener onEditAdapterListener, int lastSelectedPosition) {
         mDataset = myDataset;           // getting received english from db
+//        mFullDataset = mDataset;
         this.onEditAdapterListener = onEditAdapterListener;
+        this.lastSelectedPosition = lastSelectedPosition;
     }
 
 
@@ -47,11 +51,14 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         // - replace the contents of the view with that element
         holder.textView.setText(mDataset.get(position));
 
+
         // since only one radio button is allowed to be selected,
         // this condition un-checks previous selections
         holder.selectionState.setChecked(lastSelectedPosition == position);
 
-
+//         if data set has been filtered, radio button at the same position that was chosen before filtering will be selected
+//         won't mess the database
+//         will crash if filtered and removed the filter (last position is set to -1)
 
     }
 
@@ -84,6 +91,11 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
         @Override
         public void onClick(View view) {
             lastSelectedPosition = getAdapterPosition();
+
+            // the position of the element in the filtered set is used to get the position in the full dataset.
+//            int positionInFullDataset = mFullDataset.indexOf(mDataset.get(lastSelectedPosition));
+
+
             onEditAdapterListener.onEnglishClick(getAdapterPosition());    //calling onEnglishClick and passing in the adapter position
             notifyDataSetChanged();
         }
@@ -93,4 +105,10 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
     public interface OnEditAdapterListener {
         void onEnglishClick(int position);        //-------------- send chosen word/phrase to main activity
     }
+
+
+//    public void filteredResults(ArrayList<String> filteredPhrases) {         // used to filter search results
+//        mDataset = filteredPhrases;     //assigning updated list after filtering
+//        notifyDataSetChanged();
+//    }
 }
