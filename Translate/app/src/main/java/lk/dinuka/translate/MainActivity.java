@@ -82,6 +82,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        Open Dictionary button
+        Button dictionaryButton = findViewById(R.id.dictionary_button);
+        dictionaryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Dictionary.class);
+                startActivity(intent);
+            }
+        });
+
         refreshData();      // load data from db into allEnglishFromDB arrayList
 
     }

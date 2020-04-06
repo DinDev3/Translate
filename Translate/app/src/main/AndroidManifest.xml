@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="lk.dinuka.translate">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -11,12 +12,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TranslateActivity" android:label="Translate"/>
-        <activity android:name=".LanguageSubscription" android:label="Language Subscriptions"/>
-        <activity android:name=".EditPhrases" android:label="Edit Phrases"/>
-        <activity android:name=".DisplayPhrases" android:label="Display Phrases"/>
-        <activity android:name=".AddPhrases" android:label="Add Phrases"/>
-        <activity android:name=".MainActivity" android:label="Translate">
+        <activity android:name=".DictionarySubscriptions"></activity>
+        <activity android:name=".Dictionary" />
+        <activity
+            android:name=".TranslateActivity"
+            android:label="Translate" />
+        <activity
+            android:name=".LanguageSubscription"
+            android:label="Language Subscriptions" />
+        <activity
+            android:name=".EditPhrases"
+            android:label="Edit Phrases" />
+        <activity
+            android:name=".DisplayPhrases"
+            android:label="Display Phrases" />
+        <activity
+            android:name=".AddPhrases"
+            android:label="Add Phrases" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Translate">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
