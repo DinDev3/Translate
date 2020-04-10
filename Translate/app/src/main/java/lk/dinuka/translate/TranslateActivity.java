@@ -40,6 +40,7 @@ import lk.dinuka.translate.util.MyTranslateAdapter;
 
 import static com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions.Voice.EN_US_LISAVOICE;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
+import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, MyTranslateAdapter.OnTransAdapterListener {
 
@@ -58,9 +59,6 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     private StreamPlayer player = new StreamPlayer();
 
-
-    public static HashMap<String, String> languageCodes = new HashMap<>();        // holds all Foreign language names with language codes
-
     ArrayList<String> allSubscribedLanguages = new ArrayList<>();
 
     @Override
@@ -69,11 +67,6 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_translate);
 
         mDisplayTranslation = findViewById(R.id.translated_textView);        // TextView to display translation
-
-
-        // import all foreign languages list and add to temporary HashMap(for this activity) - <name, code>
-        getLangNamesCode();
-
 
         // create array of subscribed languages to pass into spinner
         getAllSubscriptionsArray();
@@ -178,19 +171,6 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
     }
 
 
-    public void getLangNamesCode() {
-        // get all foreign languages from db. Extract language name & subscription status
-        ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
-
-        foreignRepository.getLangsFromDB().observe(this, new Observer<List<ForeignLanguage>>() {
-            @Override
-            public void onChanged(@Nullable List<ForeignLanguage> allLangs) {
-                for (ForeignLanguage language : allLangs) {
-                    languageCodes.put(language.getLanguage(), language.getLanguageCode());     // get the subscription status of the language saved in the db
-                }
-            }
-        });
-    }
 
 
     public void getAllSubscriptionsArray() {

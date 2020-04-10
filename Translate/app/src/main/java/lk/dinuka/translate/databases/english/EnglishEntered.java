@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,6 +29,10 @@ public class EnglishEntered implements Serializable {
     @ColumnInfo(name = "updated_at")
     @TypeConverters({TimestampConverter.class})
     private Date updatedAt;
+
+
+    private String translationLang0;        // 1st translation language
+
 
 
     public int getId() {
@@ -60,5 +66,14 @@ public class EnglishEntered implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+
+    public String getTranslationLang0() {
+        return translationLang0;
+    }
+
+    public void setTranslationLang0(String translationLang0) {
+        this.translationLang0 = translationLang0;
     }
 }

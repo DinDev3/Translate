@@ -30,6 +30,10 @@ import lk.dinuka.translate.databases.foreign.ForeignLanguage;
 import lk.dinuka.translate.databases.foreign.ForeignRepository;
 import lk.dinuka.translate.util.MyLanguageAdapter;
 
+import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
+import static lk.dinuka.translate.MainActivity.languageCodes;
+
+
 public class LanguageSubscription extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -69,7 +73,7 @@ public class LanguageSubscription extends AppCompatActivity {
 
         List<String> allForeignLanguages = new ArrayList<>();
 
-        for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
+        for (Map.Entry<String, Boolean> entry : foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
             allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
         }
 
@@ -109,7 +113,7 @@ public class LanguageSubscription extends AppCompatActivity {
 //        System.out.println(foreignSubChanges);          // records the languages that the user has clicked in language adapter
 
         if (foreignSubChanges.size() > 0) {
-            for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
+            for (Map.Entry<String, Boolean> entry : foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
 
                 if (foreignSubChanges.containsKey(entry.getKey())) {     // if a language name is in the changes arrayList, subscription has been changed
 
@@ -137,7 +141,7 @@ public class LanguageSubscription extends AppCompatActivity {
 
                             foreignRepository.updateTask(foreignLanguage);          // update foreign language subscription status
 
-                            MainActivity.foreignLanguageSubs.put(foreignLanguage.getLanguage(), subscription);       // update HashMap storing subscription statuses
+                            foreignLanguageSubs.put(foreignLanguage.getLanguage(), subscription);       // update HashMap storing subscription statuses
 
                             foreignResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
                         }
@@ -178,6 +182,7 @@ public class LanguageSubscription extends AppCompatActivity {
                 ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
                 foreignRepository.insertTask(langName, langCode);
 
+                languageCodes.put(langName,langCode);       // saving lang names and codes in HashMap
                 // extra modification---
                 // store all the language names/ codes in an arrayList -> check if the language exists in the system db and add the languages
                 // only if not available in the db
