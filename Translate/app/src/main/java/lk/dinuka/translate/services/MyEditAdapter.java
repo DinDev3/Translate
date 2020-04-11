@@ -1,4 +1,4 @@
-package lk.dinuka.translate.util;
+package lk.dinuka.translate.services;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lk.dinuka.translate.R;

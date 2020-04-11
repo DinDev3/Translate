@@ -12,15 +12,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.language_translator.v3.LanguageTranslator;
-import com.ibm.watson.language_translator.v3.model.IdentifiableLanguage;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +24,7 @@ import java.util.Map;
 
 import lk.dinuka.translate.databases.foreign.ForeignLanguage;
 import lk.dinuka.translate.databases.foreign.ForeignRepository;
-import lk.dinuka.translate.util.MyLanguageAdapter;
+import lk.dinuka.translate.services.MyLanguageAdapter;
 
 import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
 import static lk.dinuka.translate.MainActivity.languageCodes;
@@ -54,12 +50,11 @@ public class LanguageSubscription extends AppCompatActivity {
         // with boolean value of subscribed
 
         // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
-//        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-//        new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
+        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+        new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
 
 
         // ---------------------------------
-
 
         recyclerView = findViewById(R.id.language_sub_recycler_view);
 
@@ -72,6 +67,7 @@ public class LanguageSubscription extends AppCompatActivity {
 
 
         List<String> allForeignLanguages = new ArrayList<>();
+
 
         for (Map.Entry<String, Boolean> entry : foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
             allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
@@ -178,18 +174,20 @@ public class LanguageSubscription extends AppCompatActivity {
 
 //                System.out.println(langName+": "+langCode);     // to check
 
-                // add each of these into the entity ForeignLanguage of the database
-                ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
-                foreignRepository.insertTask(langName, langCode);
+                if (!languageCodes.containsKey(langName)) {
+                    // add each of these into the entity ForeignLanguage of the database
+                    ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
+                    foreignRepository.insertTask(langName, langCode);
 
-                languageCodes.put(langName,langCode);       // saving lang names and codes in HashMap
+                    languageCodes.put(langName, langCode);       // saving lang names and codes in HashMap
+                }
                 // extra modification---
                 // store all the language names/ codes in an arrayList -> check if the language exists in the system db and add the languages
                 // only if not available in the db
-
             }
             return null;
         }
+
     }
 
     private LanguageTranslator initLanguageTranslatorService() {           // connect & initiate to the cloud translation service

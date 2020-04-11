@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         refreshData();      // load data from db into allEnglishFromDB arrayList
-
     }
 
 
@@ -121,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
 //                    System.out.println(english.getEnglish());
 //                    System.out.println(english.getCreatedAt());
 //                    System.out.println(english.getUpdatedAt());
+
+//                    >>>>>>>>>>>>>>>>> check this
+//                    Dictionary.allTranslationsOfChosen.add(english.getTranslationLang0());
                 }
             }
         });

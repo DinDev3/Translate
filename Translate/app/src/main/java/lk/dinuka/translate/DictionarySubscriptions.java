@@ -18,6 +18,7 @@ import com.ibm.watson.language_translator.v3.util.Language;
 import lk.dinuka.translate.databases.english.EnglishEntered;
 import lk.dinuka.translate.databases.english.EnglishRepository;
 
+import static lk.dinuka.translate.Dictionary.allTranslationsOfChosen;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.languageCodes;
 
@@ -45,13 +46,14 @@ public class DictionarySubscriptions extends AppCompatActivity {
     private void saveTranslations() {
 
         updatingPosition = 0;       // resetting update position
+        allTranslationsOfChosen.clear();        //resetting translations arrayList
         for (int i = 0; i < allEnglishFromDB.size(); i++) {
 
             translationText = allEnglishFromDB.get(i);      // get each english word stored in the arrayList of all english words
 
 //           pass in translationLang here>>>>>>>>>>>>>>>>>>>>>>>>>
 //            translatedText = translateEnglishPhrase(translationLang);
-            translateEnglishPhrase("Arabic");
+            translateEnglishPhrase("Spanish");
         }
     }
 
@@ -105,14 +107,20 @@ public class DictionarySubscriptions extends AppCompatActivity {
             englishResultObservable.observe(DictionarySubscriptions.this, new Observer<EnglishEntered>() {
                 @Override
                 public void onChanged(EnglishEntered englishEntered) {
-                    System.out.println(englishEntered.getEnglish());
-
+//                    System.out.println(englishEntered.getEnglish());
 
 //                    System.out.println(translatedPhrase+"```````````");
                     englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
 //                    System.out.println(englishEntered.getTranslationLang0());
 
                     englishRepository.updateTask(englishEntered);       // update record
+
+
+//                    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> check this  --- This should be done only when retrieving records
+
+//                    if (allTranslationsOfChosen.size() < allEnglishFromDB.size()) {
+//                        allTranslationsOfChosen.add(translatedPhrase);       // update temporary arraylist
+//                    }
 
                     englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
 

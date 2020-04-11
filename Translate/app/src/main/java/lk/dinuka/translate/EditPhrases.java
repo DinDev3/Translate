@@ -1,29 +1,20 @@
 package lk.dinuka.translate;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.annotations.Since;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import lk.dinuka.translate.databases.english.EnglishEntered;
 import lk.dinuka.translate.databases.english.EnglishRepository;
-import lk.dinuka.translate.util.MyEditAdapter;
+import lk.dinuka.translate.services.MyEditAdapter;
 
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 

@@ -7,7 +7,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Collections;
+
 import lk.dinuka.translate.databases.english.EnglishRepository;
+
+import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 
 public class AddPhrases extends AppCompatActivity {
     private EditText enterEnglish;
@@ -29,6 +33,8 @@ public class AddPhrases extends AppCompatActivity {
             englishRepository.insertTask(english);          // insert new phrase into db
             MainActivity.allEnglishFromDB.add(english);     // update arrayList of of all phrases
             displayToast("The newly entered text was saved.");
+
+            Collections.sort(allEnglishFromDB);         // sort existing english words in alphabetical order
 
         } else {
             displayToast("The phrase must have at least one character");

@@ -1,15 +1,12 @@
 package lk.dinuka.translate;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,13 +27,9 @@ import com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import lk.dinuka.translate.databases.foreign.ForeignLanguage;
-import lk.dinuka.translate.databases.foreign.ForeignRepository;
-import lk.dinuka.translate.util.MyTranslateAdapter;
+import lk.dinuka.translate.services.MyTranslateAdapter;
 
 import static com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions.Voice.EN_US_LISAVOICE;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;

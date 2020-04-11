@@ -10,11 +10,10 @@
 
     <Spinner
         android:id="@+id/language_spinner"
-        android:layout_width="280dp"
+        android:layout_width="240dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/subscribe_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,4 +82,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/translated_text" />
+
+    <Button
+        android:id="@+id/refresh_data_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="updateDisplay"
+        android:text="1"
+        android:textColor="@color/colorPrimaryLight"
+        app:layout_constraintBottom_toBottomOf="@+id/subscribe_button"
+        app:layout_constraintEnd_toStartOf="@+id/subscribe_button"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toEndOf="@+id/language_spinner"
+        app:layout_constraintTop_toTopOf="@+id/subscribe_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
