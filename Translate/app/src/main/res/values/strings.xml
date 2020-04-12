@@ -19,7 +19,7 @@
     <string name="choose_languages_button_text">Choose\nLanguages</string>
     <string name="open_ndictionary">Open\nDictionary</string>
     <string name="english">English</string>
-    <string name="update_subscriptions">Update Subscriptions</string>
+    <string name="update_subscriptions">Update Language Subscriptions</string>
     <string name="update_records">Update Records</string>
     <string name="show_nrecords">Show\nRecords</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -35,7 +36,7 @@ import lk.dinuka.translate.services.MyDictionaryAdapter;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.languageCodes;
 
-public class Dictionary extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class Dictionary extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerView;
     private MyDictionaryAdapter mAdapter;
@@ -45,6 +46,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
     private LanguageTranslator translationService;          // translation service
 
+    private String translationLang;                 // Chosen language to translate phrases into
     private String translationLanguageCode;             // used to pass in the translation code of the chosen language
     private String translationText;                     // The English text that is required to be translated will be held in this variable
     private String translatedText;              // The translated text in the desired language
@@ -56,12 +58,51 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     public static ArrayList<String> savedLanguages = new ArrayList<>();        // holds changes in saved languages (languages that have been clicked by the user)
 
 
+    // reference to SharedPreferences object
+    private SharedPreferences mPreferences;
+    // name of the sharedPrefFile
+    private String sharedPrefFile = "lk.dinuka.translate.translateLangs";
 
-    // to pass it into the recyclerview adapter
+    // Keys to get all Languages from sharedPreferences
+    final String LANG_ONE = "langOne";
+    final String LANG_TWO = "langTwo";
+    final String LANG_THREE = "langThree";
+    final String LANG_FOUR = "langFour";
+    final String LANG_FIVE = "langFive";
+
+    // Translation language names that have all translations saved in the db
+    private String mTranslationLangOne;
+    private String mTranslationLangTwo;
+    private String mTranslationLangThree;
+    private String mTranslationLangFour;
+    private String mTranslationLangFive;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
+
+
+        // use shared preferences to get saved order of translations languages in db
+
+        // initialize the shared preferences
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
+        mTranslationLangOne = mPreferences.getString(LANG_ONE, null);
+        mTranslationLangTwo = mPreferences.getString(LANG_TWO, null);
+        mTranslationLangThree = mPreferences.getString(LANG_THREE, null);
+//        getString() method takes two arguments: one for the key, and
+//        the other for the default value if the key cannot be found
+
+
+//        System.out.println("~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+//        System.out.println(mTranslationLangOne);
+//        System.out.println(mTranslationLangTwo);
+//        System.out.println(mTranslationLangThree);
+
+
+//        -------------
 
         savedLanguages.add("Spanish");
         savedLanguages.add("Arabic");
@@ -125,7 +166,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String spinnerLabel = adapterView.getItemAtPosition(i).toString();
-        selectedSpinnerLanguage = spinnerLabel;
+        selectedSpinnerLanguage = spinnerLabel;             // this is the language chosen by the user
     }
 
     @Override
@@ -135,22 +176,33 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
 
     public void displayRecords(View view) {      // display english phrases with translations
-        receiveData();
+        receiveData(selectedSpinnerLanguage);
+
+
+        // ------ temporary for testing - should be in Dictionary Subscriptions -> update subscriptions
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+
+        // save chosen languages
+        preferencesEditor.putString(LANG_ONE, savedLanguages.get(0));
+        preferencesEditor.putString(LANG_TWO, savedLanguages.get(1));
+
+        // .apply() saves the preferences asynchronously, off of the UI thread
+        preferencesEditor.apply();
+
+//        commit() method to synchronously save the preferences. It's discouraged as it can block other operations.
     }
 
 
     public void updateRecords(View view) {      // update translations of newly added english phrases into the db
-                updatingPosition = 0;       // resetting update position
+        translationLang = selectedSpinnerLanguage;
+        updatingPosition = 0;       // resetting update position
 
-//        if (allEnglishFromDB.size() > allTranslationsOfChosen.size()) {        // if new words have been added -- can't check from this
-                                                                                        // null adds up to the size
-
-            if (allTranslationsOfChosen.contains(null)) {
-                // update only if null values exists
-                for (int i = 0; i < allEnglishFromDB.size(); i++) {
-                    updateTranslation("Spanish", allEnglishFromDB.get(i));            // update translations in db
-                }
+//        if (allTranslationsOfChosen.contains(null)) {
+            // update only if null values exists
+            for (int i = 0; i < allEnglishFromDB.size(); i++) {
+                updateTranslation(translationLang, allEnglishFromDB.get(i));            // update translations in db
             }
+//        }
 
 //        }
 //        System.out.println("**"+allTranslationsOfChosen);
@@ -169,7 +221,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
 
     // ----------------------
-    public void receiveData() {        // used to display english phrase with one translation
+    public void receiveData(final String selectedSpinnerLanguage) {        // used to display english phrase with one translation
         // get all english phrases from db and display
         EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
 
@@ -181,22 +233,55 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 //                     can use these to check data of received records in console
                     System.out.println(english.getEnglish());
 
-//                    use switch case to receive the desired language here>>>>>>>>>>>>??????????????????????
+
 //                    add received translations to allTranslationsOfChosen
-                    if (english.getTranslationLang0() != null) {
-                        allTranslationsOfChosen.add(english.getTranslationLang0());
-                    } else {
-                        allTranslationsOfChosen.add(null);
+
+                    int translationLangPosition = savedLanguages.indexOf(selectedSpinnerLanguage);
+
+//                    use switch case to receive the desired language here
+                    switch (translationLangPosition) {
+                        case 0:
+                            if (english.getTranslationLang0() != null) {
+                                allTranslationsOfChosen.add(english.getTranslationLang0());
+                            } else {
+                                allTranslationsOfChosen.add(null);
+                            }
+                            break;
+                        case 1:
+                            if (english.getTranslationLang1() != null) {
+                                allTranslationsOfChosen.add(english.getTranslationLang1());
+                            } else {
+                                allTranslationsOfChosen.add(null);
+                            }
+                            break;
+                        case 2:
+                            if (english.getTranslationLang2() != null) {
+                                allTranslationsOfChosen.add(english.getTranslationLang2());
+                            } else {
+                                allTranslationsOfChosen.add(null);
+                            }
+                            break;
+                        case 3:
+                            if (english.getTranslationLang3() != null) {
+                                allTranslationsOfChosen.add(english.getTranslationLang3());
+                            } else {
+                                allTranslationsOfChosen.add(null);
+                            }
+                            break;
+                        case 4:
+                            if (english.getTranslationLang4() != null) {
+                                allTranslationsOfChosen.add(english.getTranslationLang4());
+                            } else {
+                                allTranslationsOfChosen.add(null);
+                            }
+                            break;
                     }
-
-                    System.out.println(english.getTranslationLang0());
-
+                    System.out.println(allTranslationsOfChosen);
                     mAdapter.notifyDataSetChanged();        // display changes in recyclerview
                 }
             }
         });
     }
-
 
 
 //  ---------------- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -251,12 +336,33 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 //                    System.out.println(englishEntered.getEnglish());
 
 //                    need to use switch statement here to place the update in the proper column of the table>>>>>>>>>>>>>>
+
+                    int translationLangPosition = savedLanguages.indexOf(translationLang);
+                    switch (translationLangPosition) {
+                        case 0:
+                            englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
+//                            System.out.println(englishEntered.getTranslationLang0());
+                            break;
+                        case 1:
+                            englishEntered.setTranslationLang1(translatedPhrase);          // text to be changed
+//                            System.out.println(englishEntered.getTranslationLang1());
+                            break;
+                        case 2:
+                            englishEntered.setTranslationLang2(translatedPhrase);          // text to be changed
+//                            System.out.println(englishEntered.getTranslationLang2());
+                            break;
+                        case 3:
+                            englishEntered.setTranslationLang3(translatedPhrase);          // text to be changed
+//                            System.out.println(englishEntered.getTranslationLang3());
+                            break;
+                        case 4:
+                            englishEntered.setTranslationLang4(translatedPhrase);          // text to be changed
+//                            System.out.println(englishEntered.getTranslationLang4());
+                            break;
+                    }
 //                    System.out.println(translatedPhrase+"```````````");
-                    englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
-//                    System.out.println(englishEntered.getTranslationLang0());
 
-                    allTranslationsOfChosen.add(updatingPosition,translatedPhrase);     // updating temporary arraylist to display
-
+//                    allTranslationsOfChosen.add(updatingPosition, translatedPhrase);     // updating temporary arraylist to display
 //                    System.out.println(allTranslationsOfChosen);
 
                     englishRepository.updateTask(englishEntered);       // update record

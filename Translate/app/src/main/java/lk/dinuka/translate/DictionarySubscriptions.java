@@ -28,6 +28,7 @@ import lk.dinuka.translate.databases.english.EnglishRepository;
 import lk.dinuka.translate.services.MyLanguageAdapter;
 
 import static lk.dinuka.translate.Dictionary.allTranslationsOfChosen;
+import static lk.dinuka.translate.Dictionary.savedLanguages;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
 import static lk.dinuka.translate.MainActivity.languageCodes;
@@ -35,6 +36,7 @@ import static lk.dinuka.translate.MainActivity.languageCodes;
 public class DictionarySubscriptions extends AppCompatActivity {
     private LanguageTranslator translationService;          // translation service
 
+    private String translationLang;                 // Chosen language to translate phrases into
     private String translationLanguageCode;             // used to pass in the translation code of the chosen language
     private String translationText;                     // The English text that is required to be translated will be held in this variable
     private String translatedText;              // The translated text in the desired language
@@ -83,7 +85,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
 
         // ---------------------------------
 //
-//        if (savedInstanceState != null) {
+//        if (savedInstanceState != null) {     // shared preferences can take care of this
 //
 //            ArrayList<String> foreignLangs = new ArrayList<>();
 //            boolean[] foreignSubs = new boolean[savedLangChanges.size()];
@@ -107,106 +109,113 @@ public class DictionarySubscriptions extends AppCompatActivity {
     }
 
 
-
-
     //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
     public void updateSubscriptions(View view) {
-        saveTranslations();
+
+
     }
 
 //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    private void saveTranslations() {
-
-        updatingPosition = 0;       // resetting update position
-        allTranslationsOfChosen.clear();        //resetting translations arrayList
-        for (int i = 0; i < allEnglishFromDB.size(); i++) {
-
-            translationText = allEnglishFromDB.get(i);      // get each english word stored in the arrayList of all english words
-
-//           pass in translationLang here>>>>>>>>>>>>>>>>>>>>>>>>>
-//            translatedText = translateEnglishPhrase(translationLang);
-            translateEnglishPhrase("Spanish");
-        }
-    }
-
-
-    //-------------------
-
-    private LanguageTranslator initLanguageTranslatorService() {           // connect & initiate to the cloud translation service
-        Authenticator authenticator = new IamAuthenticator("2daMreRDE8V5zPRO3enCVHGUCH1sQJs-Kdq8ryPn4-ij");
-
-        LanguageTranslator service = new LanguageTranslator("2018-05-01", authenticator);
-
-        service.setServiceUrl("https://api.us-south.language-translator.watson.cloud.ibm.com/instances/caf1b5bc-ff11-4271-96cf-93372088290d");
-
-        return service;
-    }
-
-
-    private class TranslationTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            TranslateOptions translateOptions = new TranslateOptions.Builder()
-                    .addText(params[0])
-                    .source(Language.ENGLISH)
-                    .target(params[1])    // pass in translationLanguage here, to get required language
-                    .build();
-
-            TranslationResult result = translationService.translate(translateOptions).execute().getResult();
-
-            String firstTranslation = result.getTranslations().get(0).getTranslation();
-
-            return firstTranslation;
-        }
-
-        @Override
-        protected void onPostExecute(String translatedText) {       // update one phrase at a time
-            super.onPostExecute(translatedText);
-            final String translatedPhrase = translatedText;               // translated phrase in desired language
-
-            final String translationPhrase = allEnglishFromDB.get(updatingPosition);      // get each english word stored in the arrayList of all english words
-            updatingPosition++;
-
-
-            // update translations in db ----------
-
-            // get one english phrase from db
-            final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
-
-            final LiveData<EnglishEntered> englishResultObservable = englishRepository.getEnglishByEnglish(translationPhrase);
-
-            englishResultObservable.observe(DictionarySubscriptions.this, new Observer<EnglishEntered>() {
-                @Override
-                public void onChanged(EnglishEntered englishEntered) {
-//                    System.out.println(englishEntered.getEnglish());
-
-//                    System.out.println(translatedPhrase+"```````````");
-                    englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
-//                    System.out.println(englishEntered.getTranslationLang0());
-
-                    englishRepository.updateTask(englishEntered);       // update record
-
-                    englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
-
-                }
-            });
+//
+//    private void saveTranslations() {
+//
+//        for (int n = 0; n < savedLanguages.size(); n++) {        // update translations of all translation languages
+//            if (savedLanguages.get(n) != null) {                // a translation language must exist to translate (null values can be there in this arrayList)
+//
+//                updatingPosition = 0;       // resetting update position
+//                allTranslationsOfChosen.clear();        //resetting translations arrayList
+//                for (int i = 0; i < allEnglishFromDB.size(); i++) {
+//
+//                    translationText = allEnglishFromDB.get(i);      // get each english word stored in the arrayList of all english words
+//
+////           pass in translationLang here>>>>>>>>>>>>>>>>>>>>>>>>>
+//                    translationLang = savedLanguages.get(n);
+//
+//                    translateEnglishPhrase(translationLang);
+////                    translateEnglishPhrase("Spanish");
+//                }
+//            }
+//
+//        }
+//    }
+//
+//
+//    //-------------------
+//
+//    private LanguageTranslator initLanguageTranslatorService() {           // connect & initiate to the cloud translation service
+//        Authenticator authenticator = new IamAuthenticator("2daMreRDE8V5zPRO3enCVHGUCH1sQJs-Kdq8ryPn4-ij");
+//
+//        LanguageTranslator service = new LanguageTranslator("2018-05-01", authenticator);
+//
+//        service.setServiceUrl("https://api.us-south.language-translator.watson.cloud.ibm.com/instances/caf1b5bc-ff11-4271-96cf-93372088290d");
+//
+//        return service;
+//    }
+//
+//
+//    private class TranslationTask extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            TranslateOptions translateOptions = new TranslateOptions.Builder()
+//                    .addText(params[0])
+//                    .source(Language.ENGLISH)
+//                    .target(params[1])    // pass in translationLanguage here, to get required language
+//                    .build();
+//
+//            TranslationResult result = translationService.translate(translateOptions).execute().getResult();
+//
+//            String firstTranslation = result.getTranslations().get(0).getTranslation();
+//
+//            return firstTranslation;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String translatedText) {       // update one phrase at a time
+//            super.onPostExecute(translatedText);
+//            final String translatedPhrase = translatedText;               // translated phrase in desired language
+//
+//            final String translationPhrase = allEnglishFromDB.get(updatingPosition);      // get each english word stored in the arrayList of all english words
+//            updatingPosition++;
+//
+//
+//            // update translations in db ----------
+//
+//            // get one english phrase from db
+//            final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
+//
+//            final LiveData<EnglishEntered> englishResultObservable = englishRepository.getEnglishByEnglish(translationPhrase);
+//
+//            englishResultObservable.observe(DictionarySubscriptions.this, new Observer<EnglishEntered>() {
+//                @Override
+//                public void onChanged(EnglishEntered englishEntered) {
+////                    System.out.println(englishEntered.getEnglish());
+//
+////                    System.out.println(translatedPhrase+"```````````");
+//                    englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
+////                    System.out.println(englishEntered.getTranslationLang0());
+//
+//                    englishRepository.updateTask(englishEntered);       // update record
+//
+//                    englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
+//
+//                }
+//            });
 //            System.out.println("~~~        updating complete       ~~~");
-        }
-    }
-
-    public void translateEnglishPhrase(String translationLang) {         // Translates and saves text onClick of Update subscriptions button
-        // get the translation code of the chosen language
-        translationLanguageCode = languageCodes.get(translationLang);
-
-        // translate using Watson Translator
-        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-        new TranslationTask().execute(translationText, translationLanguageCode);
-    }
-
-    //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//        }
+//    }
+//
+//    public void translateEnglishPhrase(String translationLang) {         // Translates and saves text onClick of Update subscriptions button
+//        // get the translation code of the chosen language
+//        translationLanguageCode = languageCodes.get(translationLang);
+//
+//        // translate using Watson Translator
+//        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+//        new TranslationTask().execute(translationText, translationLanguageCode);
+//    }
+//
+//    //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 }
