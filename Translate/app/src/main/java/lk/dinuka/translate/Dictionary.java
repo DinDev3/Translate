@@ -26,6 +26,7 @@ import com.ibm.watson.language_translator.v3.util.Language;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
     static List<String> allTranslationsOfChosen = new ArrayList<>();           // stores all the translated words of the desired language,
     public static ArrayList<String> savedLanguages = new ArrayList<>();        // holds changes in saved languages (languages that have been clicked by the user)
+    public static HashMap<String, Boolean> savedLangChanges = new HashMap<>();        // holds changes in saved languages (languages that have been clicked by the user)
 
 //    ArrayList<String> allSubscribedLanguages = new ArrayList<>();               //shows all subscribed languages
 
@@ -193,6 +195,8 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
     public void displayRecords(View view) {      // display english phrases with translations
         receiveData(selectedSpinnerLanguage);
+
+
 
 
         // ------ temporary for testing - should be in Dictionary Subscriptions -> update subscriptions

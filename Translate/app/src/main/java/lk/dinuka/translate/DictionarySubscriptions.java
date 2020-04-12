@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
@@ -29,6 +30,7 @@ import lk.dinuka.translate.services.MyDicSubsAdapter;
 import lk.dinuka.translate.services.MyLanguageAdapter;
 
 import static lk.dinuka.translate.Dictionary.allTranslationsOfChosen;
+import static lk.dinuka.translate.Dictionary.savedLangChanges;
 import static lk.dinuka.translate.Dictionary.savedLanguages;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
@@ -50,6 +52,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
 //    public static ArrayList<String> savedLanguages = new ArrayList<>();        // holds changes in saved languages (languages that have been clicked by the user)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,11 +118,46 @@ public class DictionarySubscriptions extends AppCompatActivity {
     //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-    public void updateSubscriptions(View view) {
+    public void updateSubscriptions(View view) {        // shared preferences are updated here - > as a result the arrayList of savedLanguages will be updated and give false
+        // results if the db isn't updated
+        int totalPossibleLanguages = 5;     // the db supports 5 savable translation languages for now
+
+        int totalSavedLanguages = 0;                // total saved languages
+        int totalRequiredToBeSaved = 0;             // newly added languages that haven't been saved before
 
 
+        for (String langName :
+                savedLanguages) {
+            if (langName != null) {        // if null, no language
+                totalSavedLanguages++;
+            }
+        }
+
+        for (Map.Entry<String, Boolean> entry : savedLangChanges.entrySet()) {         //checking for all HashMap entries
+            if ((entry.getValue() == true) && !(savedLanguages.contains(entry.getKey()))) {             // only saved languages that haven't been already saved will be counted
+                totalRequiredToBeSaved++;
+            }
+        }
+
+        int totalSavableChanges = totalPossibleLanguages - totalSavedLanguages;     // total languages that can be saved
+
+        if (totalSavableChanges >= totalRequiredToBeSaved) {     // this will check whether any more languages can be added
+            displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+
+
+        } else{
+            displayToast("Currently, the app supports saving up to 5 languages. You have chosen "+(totalRequiredToBeSaved - totalSavableChanges)+" language(s) more than the limit.");
+
+
+        }
+
+        // check if savedLangChanges.get() = true and exisiting in savedLanguuages ArrayList. No need to make any changes then
     }
 
+    public void displayToast(String message) {
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT).show();
+    }
 //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //    private void saveTranslations() {

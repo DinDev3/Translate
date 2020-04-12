@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import lk.dinuka.translate.R;
 
+import static lk.dinuka.translate.Dictionary.savedLangChanges;
 import static lk.dinuka.translate.Dictionary.savedLanguages;
 
 // Adapter for Dictionary Subscriptions class
@@ -36,7 +37,7 @@ public class MyDicSubsAdapter extends RecyclerView.Adapter<MyDicSubsAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         holder.checkedTextView.setText(mDataset.get(position));
 
 
@@ -47,7 +48,7 @@ public class MyDicSubsAdapter extends RecyclerView.Adapter<MyDicSubsAdapter.MyVi
         // depending on the saved status; display the check--
 
         // if changes were made to the subscription before rotation of device,
-//        Boolean subscriptionChanged = foreignSubChanges.get(mDataset.get(position));
+        Boolean subscriptionChanged = savedLangChanges.get(mDataset.get(position));
 
 
         if (savedStatus) {
@@ -58,51 +59,42 @@ public class MyDicSubsAdapter extends RecyclerView.Adapter<MyDicSubsAdapter.MyVi
             holder.checkedTextView.setChecked(false);
         }
 
-//        if (subscriptionChanged != null) {        // only if changes were made
-//            if (subscriptionChanged) {
-//                holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
-//                holder.checkedTextView.setChecked(true);
-//            } else {
-//                holder.checkedTextView.setCheckMarkDrawable(null);
-//                holder.checkedTextView.setChecked(false);
-//            }
-//        }
+        if (subscriptionChanged != null) {        // only if changes were made
+            if (subscriptionChanged) {
+                holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
+                holder.checkedTextView.setChecked(true);
+            } else {
+                holder.checkedTextView.setCheckMarkDrawable(null);
+                holder.checkedTextView.setChecked(false);
+            }
+        }
 
-//
-//        // perform on Click Event Listener on CheckedTextView
-//        holder.checkedTextView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Boolean value = holder.checkedTextView.isChecked();
-//                if (value) {
-//                    // set check mark drawable and set checked property to false
-//
-//                    holder.checkedTextView.setCheckMarkDrawable(null);
-//                    holder.checkedTextView.setChecked(false);
-////                    Toast.makeText(context, "un-Checked", Toast.LENGTH_LONG).show();
-//                } else {
-//                    // set check mark drawable and set checked property to true
-//
-////                    holder.checkedTextView.setCheckMarkDrawable(R.drawable.checked);
-//                    holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
-//                    holder.checkedTextView.setChecked(true);
-////                    Toast.makeText(context, "Checked", Toast.LENGTH_LONG).show();
-//                }
-//
-//
-//                // update HashMap with new subscription status -----------------
-//                foreignSubChanges.put(holder.checkedTextView.getText().toString(), holder.checkedTextView.isChecked());
-//
-//                if ((foreignSubChanges.get(holder.checkedTextView.getText().toString())) ==
-//                        (foreignLanguageSubs.get(holder.checkedTextView.getText().toString()))) {
-//
-//                    // if the final change is the same as the initially existed subscription status, the language is
-//                    // removed from the subscription changes HashMap
-//
-//                    foreignSubChanges.remove(holder.checkedTextView.getText().toString());
-//                }
-//            }
-//        });
+
+        // perform on Click Event Listener on CheckedTextView
+        holder.checkedTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Boolean value = holder.checkedTextView.isChecked();
+                if (value) {
+                    // set check mark drawable and set checked property to false
+
+                    holder.checkedTextView.setCheckMarkDrawable(null);
+                    holder.checkedTextView.setChecked(false);
+//                    Toast.makeText(context, "un-Checked", Toast.LENGTH_LONG).show();
+                } else {
+                    // set check mark drawable and set checked property to true
+
+//                    holder.checkedTextView.setCheckMarkDrawable(R.drawable.checked);
+                    holder.checkedTextView.setCheckMarkDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.tick));
+                    holder.checkedTextView.setChecked(true);
+//                    Toast.makeText(context, "Checked", Toast.LENGTH_LONG).show();
+                }
+
+
+                // update HashMap with new subscription status -----------------
+                savedLangChanges.put(holder.checkedTextView.getText().toString(), holder.checkedTextView.isChecked());
+            }
+        });
     }
 
     @Override
