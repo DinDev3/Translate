@@ -134,21 +134,62 @@ public class DictionarySubscriptions extends AppCompatActivity {
         }
 
         for (Map.Entry<String, Boolean> entry : savedLangChanges.entrySet()) {         //checking for all HashMap entries
-            if ((entry.getValue() == true) && !(savedLanguages.contains(entry.getKey()))) {             // only saved languages that haven't been already saved will be counted
+            if (entry.getValue() && !(savedLanguages.contains(entry.getKey()))) {             // only languages that haven't been already saved will be counted
                 totalRequiredToBeSaved++;
+            } else if (!entry.getValue() && (savedLanguages.contains(entry.getKey()))) {     // saved languages that have been requested to be removed
+                totalSavedLanguages--;
             }
         }
 
         int totalSavableChanges = totalPossibleLanguages - totalSavedLanguages;     // total languages that can be saved
 
-        if (totalSavableChanges >= totalRequiredToBeSaved) {     // this will check whether any more languages can be added
-            displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+        if (totalRequiredToBeSaved > 0) {
+            if (totalSavedLanguages == 0) {
+                displayToast("Currently, the app supports saving up to 5 languages. You have reached the limit of the number of languages that can be saved.");
+
+            } else if (totalSavableChanges >= totalRequiredToBeSaved) {     // this will check whether any more languages can be added
 
 
+                for (Map.Entry<String, Boolean> entry : savedLangChanges.entrySet()) {         //checking for all HashMap entries
+                    if (entry.getValue() && (savedLanguages.contains(entry.getKey()))) {             // languages that have already been saved & requested to be changed will be ignored
+                        savedLangChanges.remove(entry.getKey());
+
+                    } else if (!entry.getValue() && (savedLanguages.contains(entry.getKey()))) {     // saved languages that have been requested to be removed
+
+                        // remove language from arrayList
+
+                        // get shared preference position?
+
+                        // make all values of the column null in db - - - >
+
+                        // make position of shared preference null
+
+                        displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+
+
+                    } else if (entry.getValue() && !(savedLanguages.contains(entry.getKey()))) {         // new languages that haven't been saved before
+                        // get available shared preference position -> has null value
+
+                        // add language name to share preference position
+
+
+                        displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                    } else {
+                        //"No changes were requested to be made to the Language Subscriptions of the Dictionary."
+                        // not required to show the message here.
+                    }
+
+                }
+
+
+            } else {
+                displayToast("Currently, the app supports saving up to 5 languages. You have chosen " + (totalRequiredToBeSaved - totalSavableChanges) + " language(s) more than the limit.");
+
+
+            }
         } else{
-            displayToast("Currently, the app supports saving up to 5 languages. You have chosen "+(totalRequiredToBeSaved - totalSavableChanges)+" language(s) more than the limit.");
-
-
+            displayToast("No changes were requested to be made to the Language Subscriptions of the Dictionary.");
         }
 
         // check if savedLangChanges.get() = true and exisiting in savedLanguuages ArrayList. No need to make any changes then
