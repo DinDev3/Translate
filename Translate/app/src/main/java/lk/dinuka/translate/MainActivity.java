@@ -121,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
 //                    System.out.println(english.getCreatedAt());
 //                    System.out.println(english.getUpdatedAt());
 
-//                    >>>>>>>>>>>>>>>>> check this
-//                    Dictionary.allTranslationsOfChosen.add(english.getTranslationLang0());
                 }
             }
         });

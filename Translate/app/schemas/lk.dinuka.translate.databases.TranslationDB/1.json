@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "64dc155be362b0a186e14b8d86b46951",
+    "identityHash": "3e096b37b010a5bd81cf51da6a2f9569",
     "entities": [
       {
         "tableName": "EnglishEntered",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `english` TEXT, `created_at` TEXT, `updated_at` TEXT, `translationLang0` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `english` TEXT, `created_at` TEXT, `updated_at` TEXT, `translationLang0` TEXT, `translationLang1` TEXT, `translationLang2` TEXT, `translationLang3` TEXT, `translationLang4` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -35,6 +35,30 @@
           {
             "fieldPath": "translationLang0",
             "columnName": "translationLang0",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang1",
+            "columnName": "translationLang1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang2",
+            "columnName": "translationLang2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang3",
+            "columnName": "translationLang3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang4",
+            "columnName": "translationLang4",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -102,7 +126,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64dc155be362b0a186e14b8d86b46951')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3e096b37b010a5bd81cf51da6a2f9569')"
     ]
   }
 }

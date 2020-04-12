@@ -9,8 +9,8 @@
 
 
     <Spinner
-        android:id="@+id/language_spinner"
-        android:layout_width="240dp"
+        android:id="@+id/dic_language_spinner"
+        android:layout_width="205dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -27,9 +27,9 @@
         android:textAllCaps="false"
         android:textColor="@color/colorPrimaryLight"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/language_spinner"
+        app:layout_constraintBottom_toBottomOf="@+id/dic_language_spinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/language_spinner" />
+        app:layout_constraintTop_toTopOf="@+id/dic_language_spinner" />
 
     <EditText
         android:id="@+id/search_box"
@@ -67,7 +67,7 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/border"
         android:gravity="center|center_vertical"
-        android:text="TextView"
+        android:text="~~~TextView~~~"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/english_text"
@@ -78,22 +78,38 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/translated_text" />
 
     <Button
-        android:id="@+id/refresh_data_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:id="@+id/show_records_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        android:onClick="updateDisplay"
-        android:text="1"
+        android:onClick="displayRecords"
+        android:text="@string/show_nrecords"
+        android:textAllCaps="false"
         android:textColor="@color/colorPrimaryLight"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/subscribe_button"
         app:layout_constraintEnd_toStartOf="@+id/subscribe_button"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toEndOf="@+id/language_spinner"
         app:layout_constraintTop_toTopOf="@+id/subscribe_button" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="updateRecords"
+        android:text="@string/update_records"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

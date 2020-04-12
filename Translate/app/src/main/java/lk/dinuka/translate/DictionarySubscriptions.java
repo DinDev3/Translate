@@ -3,6 +3,8 @@ package lk.dinuka.translate;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,11 +17,19 @@ import com.ibm.watson.language_translator.v3.model.TranslateOptions;
 import com.ibm.watson.language_translator.v3.model.TranslationResult;
 import com.ibm.watson.language_translator.v3.util.Language;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import lk.dinuka.translate.databases.english.EnglishEntered;
 import lk.dinuka.translate.databases.english.EnglishRepository;
+import lk.dinuka.translate.services.MyLanguageAdapter;
 
 import static lk.dinuka.translate.Dictionary.allTranslationsOfChosen;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
+import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
 import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class DictionarySubscriptions extends AppCompatActivity {
@@ -31,11 +41,76 @@ public class DictionarySubscriptions extends AppCompatActivity {
 
     private int updatingPosition;               // used to get the position of the phrase that's being translated, to update
 
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
+//    public static ArrayList<String> savedLanguages = new ArrayList<>();        // holds changes in saved languages (languages that have been clicked by the user)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_subscriptions);
+
+        // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
+        // with boolean value of subscribed
+
+        // ---------------------------------
+
+        recyclerView = findViewById(R.id.language_sub_recycler_view);
+
+
+        recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
+
+        // Use a linear layout within the recycler view
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+        List<String> allForeignLanguages = new ArrayList<>();
+
+
+        for (Map.Entry<String, Boolean> entry : foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
+            allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
+        }
+
+        Collections.sort(allForeignLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
+
+        // specify the adapter (a bridge between a UI component and a data source)
+        mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
+        recyclerView.setAdapter(mAdapter);
+
+        // ---------------------------------
+//
+//        if (savedInstanceState != null) {
+//
+//            ArrayList<String> foreignLangs = new ArrayList<>();
+//            boolean[] foreignSubs = new boolean[savedLangChanges.size()];
+//
+//            foreignLangs = savedInstanceState.getStringArrayList("lang_changes");
+//            foreignSubs = savedInstanceState.getBooleanArray("subs_changes");
+//
+//            if (foreignLangs != null) {
+//                if (foreignSubs != null) {      // avoiding null pointer exceptions
+//                    for (int i = 0; i < foreignLangs.size(); i++) {
+//                        savedLangChanges.put(foreignLangs.get(i), foreignSubs[i]);
+//                    }
+//                }
+//            }
+////            System.out.println(foreignSubChanges);
+////            mAdapter.notifyDataSetChanged();
+//            // pass in this arraylist into the constructor of the adapter as well>>>>>???
+//        }
+
+
     }
+
+
+
+
+    //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
     public void updateSubscriptions(View view) {
         saveTranslations();
@@ -115,22 +190,15 @@ public class DictionarySubscriptions extends AppCompatActivity {
 
                     englishRepository.updateTask(englishEntered);       // update record
 
-
-//                    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> check this  --- This should be done only when retrieving records
-
-//                    if (allTranslationsOfChosen.size() < allEnglishFromDB.size()) {
-//                        allTranslationsOfChosen.add(translatedPhrase);       // update temporary arraylist
-//                    }
-
                     englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
 
                 }
             });
-
+//            System.out.println("~~~        updating complete       ~~~");
         }
     }
 
-    public void translateEnglishPhrase(String translationLang) {         // Translates and displays text onClick of Translate button
+    public void translateEnglishPhrase(String translationLang) {         // Translates and saves text onClick of Update subscriptions button
         // get the translation code of the chosen language
         translationLanguageCode = languageCodes.get(translationLang);
 
@@ -138,4 +206,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
         translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
         new TranslationTask().execute(translationText, translationLanguageCode);
     }
+
+    //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 }
