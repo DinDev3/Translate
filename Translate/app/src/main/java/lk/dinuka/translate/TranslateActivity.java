@@ -128,22 +128,25 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     public void translateChosenEnglish(View view) {         // Translates and displays text onClick of Translate button
 
-        // get translation language from spinner and assign here
-        // get the translation code of the chosen language
-        translationLanguageCode = languageCodes.get(selectedSpinnerLanguage);
+        if (!allSubscribedLanguages.isEmpty()) {     // check if the user has subscribed to at least one translation language
+            // get translation language from spinner and assign here
+            // get the translation code of the chosen language
+            translationLanguageCode = languageCodes.get(selectedSpinnerLanguage);
 
 
 //        translationText = "Hello World";          // hard coded dummy value for testing
-        if (translationText != null) {
+            if (translationText != null) {
 
-            // translate using Watson Translator
-            translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-            new TranslationTask().execute(translationText, translationLanguageCode);
+                // translate using Watson Translator
+                translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+                new TranslationTask().execute(translationText, translationLanguageCode);
 
-        } else {
-            displayToast("Choose a word/ phrase to be translated");
+            } else {
+                displayToast("Choose a word/ phrase to be translated.");
+            }
+        } else{
+            displayToast("The first step is to subscribe to a language.");
         }
-
     }
 
     public void pronounceTranslation(View view) {  // pronounce translated word/ phrase

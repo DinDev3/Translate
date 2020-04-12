@@ -25,6 +25,7 @@ import java.util.Map;
 
 import lk.dinuka.translate.databases.english.EnglishEntered;
 import lk.dinuka.translate.databases.english.EnglishRepository;
+import lk.dinuka.translate.services.MyDicSubsAdapter;
 import lk.dinuka.translate.services.MyLanguageAdapter;
 
 import static lk.dinuka.translate.Dictionary.allTranslationsOfChosen;
@@ -70,17 +71,19 @@ public class DictionarySubscriptions extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-        List<String> allForeignLanguages = new ArrayList<>();
+        List<String> availableLanguages = new ArrayList<>();
 
 
         for (Map.Entry<String, Boolean> entry : foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
-            allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
+            if (entry.getValue() == true) {             // only subscribed languages will be shown here to choose
+                availableLanguages.add(entry.getKey());              //adding language name into availableLanguages arrayList
+            }
         }
 
-        Collections.sort(allForeignLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
+        Collections.sort(availableLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
 
         // specify the adapter (a bridge between a UI component and a data source)
-        mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
+        mAdapter = new MyDicSubsAdapter(availableLanguages);          // insert list of languages
         recyclerView.setAdapter(mAdapter);
 
         // ---------------------------------

@@ -12,8 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DictionarySubscriptions"></activity>
-        <activity android:name=".Dictionary" />
+        <activity
+            android:name=".DictionarySubscriptions"
+            android:label="Dictionary: Language Subscriptions" />
+        <activity
+            android:name=".Dictionary"
+            android:label="Dictionary" />
         <activity
             android:name=".TranslateActivity"
             android:label="Translate" />

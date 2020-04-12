@@ -24,7 +24,7 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
 
 
     public MyLanguageAdapter(List<String> allForeignLanguages) {
-        mDataset = allForeignLanguages;           // getting received english from db
+        mDataset = allForeignLanguages;           // getting received languages from db
     }
 
 

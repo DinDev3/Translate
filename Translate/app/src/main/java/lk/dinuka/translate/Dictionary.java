@@ -54,8 +54,9 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     private int updatingPosition;               // used to get the position of the phrase that's being translated, to update
 
     static List<String> allTranslationsOfChosen = new ArrayList<>();           // stores all the translated words of the desired language,
-    ArrayList<String> allSubscribedLanguages = new ArrayList<>();               //shows all subscribed languages
     public static ArrayList<String> savedLanguages = new ArrayList<>();        // holds changes in saved languages (languages that have been clicked by the user)
+
+//    ArrayList<String> allSubscribedLanguages = new ArrayList<>();               //shows all subscribed languages
 
 
     // reference to SharedPreferences object
@@ -92,9 +93,19 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         mTranslationLangOne = mPreferences.getString(LANG_ONE, null);
         mTranslationLangTwo = mPreferences.getString(LANG_TWO, null);
         mTranslationLangThree = mPreferences.getString(LANG_THREE, null);
+        mTranslationLangFour = mPreferences.getString(LANG_FOUR, null);
+        mTranslationLangFive = mPreferences.getString(LANG_FIVE, null);
 //        getString() method takes two arguments: one for the key, and
 //        the other for the default value if the key cannot be found
 
+
+        if (savedLanguages.isEmpty()) {         // otherwise gets added multiple times when the activity is reopened
+            savedLanguages.add(mTranslationLangOne);
+            savedLanguages.add(mTranslationLangTwo);
+            savedLanguages.add(mTranslationLangThree);
+            savedLanguages.add(mTranslationLangFour);
+            savedLanguages.add(mTranslationLangFive);
+        }
 
 //        System.out.println("~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
 //        System.out.println(mTranslationLangOne);
@@ -104,8 +115,8 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
 //        -------------
 
-        savedLanguages.add("Spanish");
-        savedLanguages.add("Arabic");
+//        savedLanguages.add("Spanish");
+//        savedLanguages.add("Arabic");
 
 
 //        receiveData();
@@ -120,7 +131,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
             }
         });
 
-        // -----------------------
+        // ----------Recycler view adapter
 
         recyclerView = findViewById(R.id.display_recycler_view);
         recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
@@ -133,12 +144,17 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         mAdapter = new MyDictionaryAdapter(allEnglishFromDB, allTranslationsOfChosen);          // insert initial list of words here
         recyclerView.setAdapter(mAdapter);
 
-        // -----------------------
-        // create array of subscribed languages to pass into spinner
-        getAllSubscriptionsArray();
-
 
         //---------Spinner
+        ArrayList<String> spinnerLanguages = new ArrayList<>();
+
+        for (String langName :
+                savedLanguages) {
+            if (langName!=null){        // if null, arrayAdapter of spinner gives null pointer
+                spinnerLanguages.add(langName);
+            }
+        }
+
 
         // create the spinner
         Spinner spinner = findViewById(R.id.dic_language_spinner);
@@ -149,7 +165,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
         // Create ArrayAdapter using the string array and default spinner layout.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, savedLanguages);
+                android.R.layout.simple_spinner_item, spinnerLanguages);
 
 
         // Specify the layout to use when the list of choices appears.
@@ -197,26 +213,12 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         translationLang = selectedSpinnerLanguage;
         updatingPosition = 0;       // resetting update position
 
-//        if (allTranslationsOfChosen.contains(null)) {
-            // update only if null values exists
-            for (int i = 0; i < allEnglishFromDB.size(); i++) {
-                updateTranslation(translationLang, allEnglishFromDB.get(i));            // update translations in db
-            }
-//        }
 
-//        }
-//        System.out.println("**"+allTranslationsOfChosen);
-    }
-
-
-    public void getAllSubscriptionsArray() {
-
-        for (Map.Entry<String, Boolean> entry : MainActivity.foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
-            if (entry.getValue() == true) {     // add languages that have been subscribed to by the user
-                allSubscribedLanguages.add(entry.getKey());              //adding language name into allSubscribedLanguages arrayList
-            }
+        for (int i = 0; i < allEnglishFromDB.size(); i++) {
+            updateTranslation(translationLang, allEnglishFromDB.get(i));            // update translations in db
         }
-        Collections.sort(allSubscribedLanguages);           // sorting all languages received in alphabetical order (because HashMap has no order)
+
+//        System.out.println("**"+allTranslationsOfChosen);
     }
 
 
@@ -231,7 +233,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
                 allTranslationsOfChosen.clear();            // clearing existing data
                 for (EnglishEntered english : allEnglish) {
 //                     can use these to check data of received records in console
-                    System.out.println(english.getEnglish());
+//                    System.out.println(english.getEnglish());
 
 
 //                    add received translations to allTranslationsOfChosen
@@ -276,7 +278,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
                             }
                             break;
                     }
-                    System.out.println(allTranslationsOfChosen);
+//                    System.out.println(allTranslationsOfChosen);
                     mAdapter.notifyDataSetChanged();        // display changes in recyclerview
                 }
             }
@@ -360,10 +362,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 //                            System.out.println(englishEntered.getTranslationLang4());
                             break;
                     }
-//                    System.out.println(translatedPhrase+"```````````");
-
-//                    allTranslationsOfChosen.add(updatingPosition, translatedPhrase);     // updating temporary arraylist to display
-//                    System.out.println(allTranslationsOfChosen);
 
                     englishRepository.updateTask(englishEntered);       // update record
 
