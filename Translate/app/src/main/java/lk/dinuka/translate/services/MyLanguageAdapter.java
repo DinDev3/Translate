@@ -1,11 +1,9 @@
-package lk.dinuka.translate.util;
+package lk.dinuka.translate.services;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -26,7 +24,7 @@ public class MyLanguageAdapter extends RecyclerView.Adapter<MyLanguageAdapter.My
 
 
     public MyLanguageAdapter(List<String> allForeignLanguages) {
-        mDataset = allForeignLanguages;           // getting received english from db
+        mDataset = allForeignLanguages;           // getting received languages from db
     }
 
 

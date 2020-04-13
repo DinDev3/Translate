@@ -1,15 +1,12 @@
 package lk.dinuka.translate;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,16 +27,13 @@ import com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import lk.dinuka.translate.databases.foreign.ForeignLanguage;
-import lk.dinuka.translate.databases.foreign.ForeignRepository;
-import lk.dinuka.translate.util.MyTranslateAdapter;
+import lk.dinuka.translate.services.MyTranslateAdapter;
 
 import static com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions.Voice.EN_US_LISAVOICE;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
+import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, MyTranslateAdapter.OnTransAdapterListener {
 
@@ -58,9 +52,6 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     private StreamPlayer player = new StreamPlayer();
 
-
-    public static HashMap<String, String> languageCodes = new HashMap<>();        // holds all Foreign language names with language codes
-
     ArrayList<String> allSubscribedLanguages = new ArrayList<>();
 
     @Override
@@ -69,11 +60,6 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_translate);
 
         mDisplayTranslation = findViewById(R.id.translated_textView);        // TextView to display translation
-
-
-        // import all foreign languages list and add to temporary HashMap(for this activity) - <name, code>
-        getLangNamesCode();
-
 
         // create array of subscribed languages to pass into spinner
         getAllSubscriptionsArray();
@@ -142,22 +128,25 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 
     public void translateChosenEnglish(View view) {         // Translates and displays text onClick of Translate button
 
-        // get translation language from spinner and assign here
-        // get the translation code of the chosen language
-        translationLanguageCode = languageCodes.get(selectedSpinnerLanguage);
+        if (!allSubscribedLanguages.isEmpty()) {     // check if the user has subscribed to at least one translation language
+            // get translation language from spinner and assign here
+            // get the translation code of the chosen language
+            translationLanguageCode = languageCodes.get(selectedSpinnerLanguage);
 
 
 //        translationText = "Hello World";          // hard coded dummy value for testing
-        if (translationText != null) {
+            if (translationText != null) {
 
-            // translate using Watson Translator
-            translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-            new TranslationTask().execute(translationText, translationLanguageCode);
+                // translate using Watson Translator
+                translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+                new TranslationTask().execute(translationText, translationLanguageCode);
 
-        } else {
-            displayToast("Choose a word/ phrase to be translated");
+            } else {
+                displayToast("Choose a word/ phrase to be translated.");
+            }
+        } else{
+            displayToast("The first step is to subscribe to a language.");
         }
-
     }
 
     public void pronounceTranslation(View view) {  // pronounce translated word/ phrase
@@ -178,19 +167,6 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
     }
 
 
-    public void getLangNamesCode() {
-        // get all foreign languages from db. Extract language name & subscription status
-        ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
-
-        foreignRepository.getLangsFromDB().observe(this, new Observer<List<ForeignLanguage>>() {
-            @Override
-            public void onChanged(@Nullable List<ForeignLanguage> allLangs) {
-                for (ForeignLanguage language : allLangs) {
-                    languageCodes.put(language.getLanguage(), language.getLanguageCode());     // get the subscription status of the language saved in the db
-                }
-            }
-        });
-    }
 
 
     public void getAllSubscriptionsArray() {

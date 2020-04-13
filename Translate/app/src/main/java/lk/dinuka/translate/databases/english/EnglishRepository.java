@@ -24,6 +24,7 @@ public class EnglishRepository {
 
         // creating an instance of the created database
         translationDB = Room.databaseBuilder(context, TranslationDB.class, DATABASE_NAME).build();
+
     }
 
 

@@ -1,0 +1,132 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "3e096b37b010a5bd81cf51da6a2f9569",
+    "entities": [
+      {
+        "tableName": "EnglishEntered",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `english` TEXT, `created_at` TEXT, `updated_at` TEXT, `translationLang0` TEXT, `translationLang1` TEXT, `translationLang2` TEXT, `translationLang3` TEXT, `translationLang4` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "english",
+            "columnName": "english",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang0",
+            "columnName": "translationLang0",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang1",
+            "columnName": "translationLang1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang2",
+            "columnName": "translationLang2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang3",
+            "columnName": "translationLang3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "translationLang4",
+            "columnName": "translationLang4",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ForeignLanguage",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lang_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `language` TEXT, `languageCode` TEXT, `subscriptionStatus` INTEGER, `created_at` TEXT, `updated_at` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "lang_id",
+            "columnName": "lang_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "languageCode",
+            "columnName": "languageCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "subscriptionStatus",
+            "columnName": "subscriptionStatus",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "lang_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3e096b37b010a5bd81cf51da6a2f9569')"
+    ]
+  }
+}

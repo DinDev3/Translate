@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     public static List<String> allEnglishFromDB = new ArrayList<>();        // holds all English data received from db
     public static HashMap<String, Boolean> foreignLanguageSubs = new HashMap<>();        // holds all Foreign subscriptions received from db with subscription status
 
+    public static HashMap<String, String> languageCodes = new HashMap<>();        // holds all Foreign language names with language codes
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +84,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        refreshData();      // load data from db into allEnglishFromDB arrayList
+//        Open Dictionary button
+        Button dictionaryButton = findViewById(R.id.dictionary_button);
+        dictionaryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Dictionary.class);
+                startActivity(intent);
+            }
+        });
 
+
+        refreshData();      // load data from db into allEnglishFromDB arrayList
     }
 
 
     public void refreshData() {
-        //       --------------------------------------------------------------------------------------------
+//       --------------------------------------------------------------------------------------------
         // this is placed here so that whenever new words are added, when coming back to the Main Screen and
         // going to a display words screen, the list of words get updated.
 
@@ -103,11 +115,12 @@ public class MainActivity extends AppCompatActivity {
                     allEnglishFromDB.add(english.getEnglish());     // saving all english word/ phrases received
 
 //                     can use these to check data of received records in console
-//                    System.out.println("-----------------------1");
+//                    System.out.println("-----------------------");
 //                    System.out.println(english.getId());
 //                    System.out.println(english.getEnglish());
 //                    System.out.println(english.getCreatedAt());
 //                    System.out.println(english.getUpdatedAt());
+
                 }
             }
         });
@@ -122,12 +135,18 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<ForeignLanguage> allLangs) {
                 foreignLanguageSubs.clear();           // clearing existing data
                 for (ForeignLanguage language : allLangs) {
-//                    System.out.println("-----------------------2");
+//                    System.out.println("-----------------------");
 
-                    if (language.getSubscriptionStatus() != foreignLanguageSubs.get(language.getLanguage()))
+                    if (language.getSubscriptionStatus() != foreignLanguageSubs.get(language.getLanguage())) {
                         foreignLanguageSubs.put(language.getLanguage(), language.getSubscriptionStatus());     // get the subscription status of the language saved in the db
+                    }
+
+                    // get all foreign languages from db. Extract language name & subscription status
+                    languageCodes.put(language.getLanguage(), language.getLanguageCode());     // get the subscription status of the language saved in the db
+
                 }
             }
         });
     }
+
 }

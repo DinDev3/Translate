@@ -15,5 +15,4 @@ public abstract class TranslationDB extends RoomDatabase {
     // list of operations that are required to be performed on the Database are below
     public abstract EnglishDAO englishDAO();
     public abstract ForeignDAO foreignDAO();
-
 }

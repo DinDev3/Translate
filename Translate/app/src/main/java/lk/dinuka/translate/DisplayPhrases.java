@@ -9,11 +9,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.ibm.watson.assistant.v1.model.Example;
-
 import java.util.ArrayList;
 
-import lk.dinuka.translate.util.MyDisplayAdapter;
+import lk.dinuka.translate.services.MyDisplayAdapter;
 
 public class DisplayPhrases extends AppCompatActivity {
 
