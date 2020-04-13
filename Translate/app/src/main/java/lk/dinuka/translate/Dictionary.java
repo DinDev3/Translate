@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
@@ -84,8 +85,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
 
-//  -       -   -           -           --          --          -       -   -   -
-        // this should be done onResume() as well???>>>>>>> otherwise when coming back from "Choose languages" doesn't come to spinner <<<< spinner needs to be reset??
 
         // use shared preferences to get saved order of translations languages columns in db
 
@@ -137,13 +136,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
 
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//    }
-
 
     @Override
     protected void onStart() {
@@ -198,6 +190,8 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     public void displayRecords(View view) {      // display english phrases with translations
         receiveData(selectedSpinnerLanguage);
 
+        TextView mTranslateColumnLabel = findViewById(R.id.translated_text);
+        mTranslateColumnLabel.setText(selectedSpinnerLanguage);
     }
 
 

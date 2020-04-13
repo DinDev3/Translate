@@ -22,4 +22,5 @@
     <string name="update_subscriptions">Update Language Subscriptions</string>
     <string name="update_records">Update Records</string>
     <string name="show_nrecords">Show\nRecords</string>
+    <string name="translation">Translation</string>
 </resources>
