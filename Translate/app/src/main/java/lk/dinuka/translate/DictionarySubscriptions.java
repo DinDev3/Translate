@@ -216,7 +216,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
                         savedLanguages.remove(sharedPrefPositionOfLang);
                         savedLanguages.add(sharedPrefPositionOfLang,null);          // to maintain the size of the arrayList
 
-                        displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+                        displayToast("Languages have been successfully updated.");
 
 
                     } else if (entry.getValue() && !(savedLanguages.contains(entry.getKey()))) {         // new languages that haven't been saved before
@@ -268,7 +268,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
                         savedLanguages.add(freePosition,langNameToBeAdded);
 
 
-                        displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+                        displayToast("Languages have been successfully updated.");
 
                     } else {
                         //"No changes were requested to be made to the Language Subscriptions of the Dictionary."
