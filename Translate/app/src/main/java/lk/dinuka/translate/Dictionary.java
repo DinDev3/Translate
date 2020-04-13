@@ -58,8 +58,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     public static ArrayList<String> savedLanguages = new ArrayList<>();        // holds changes in saved languages (languages that have been clicked by the user)
     public static HashMap<String, Boolean> savedLangChanges = new HashMap<>();        // holds changes in saved languages (languages that have been clicked by the user)
 
-//    ArrayList<String> allSubscribedLanguages = new ArrayList<>();               //shows all subscribed languages
-
 
     // reference to SharedPreferences object
     private SharedPreferences mPreferences;
@@ -86,8 +84,10 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
 
+//  -       -   -           -           --          --          -       -   -   -
+        // this should be done onResume() as well???>>>>>>> otherwise when coming back from "Choose languages" doesn't come to spinner <<<< spinner needs to be reset??
 
-        // use shared preferences to get saved order of translations languages in db
+        // use shared preferences to get saved order of translations languages columns in db
 
         // initialize the shared preferences
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
@@ -108,17 +108,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
             savedLanguages.add(mTranslationLangFour);
             savedLanguages.add(mTranslationLangFive);
         }
-
-//        System.out.println("~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-//        System.out.println(mTranslationLangOne);
-//        System.out.println(mTranslationLangTwo);
-//        System.out.println(mTranslationLangThree);
-
-
-//        -------------
-
-//        savedLanguages.add("Spanish");
-//        savedLanguages.add("Arabic");
 
 
 //        receiveData();
@@ -146,6 +135,19 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         mAdapter = new MyDictionaryAdapter(allEnglishFromDB, allTranslationsOfChosen);          // insert initial list of words here
         recyclerView.setAdapter(mAdapter);
 
+
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         //---------Spinner
         ArrayList<String> spinnerLanguages = new ArrayList<>();
@@ -196,20 +198,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     public void displayRecords(View view) {      // display english phrases with translations
         receiveData(selectedSpinnerLanguage);
 
-
-
-
-        // ------ temporary for testing - should be in Dictionary Subscriptions -> update subscriptions
-        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-
-        // save chosen languages
-        preferencesEditor.putString(LANG_ONE, savedLanguages.get(0));
-        preferencesEditor.putString(LANG_TWO, savedLanguages.get(1));
-
-        // .apply() saves the preferences asynchronously, off of the UI thread
-        preferencesEditor.apply();
-
-//        commit() method to synchronously save the preferences. It's discouraged as it can block other operations.
     }
 
 
@@ -236,9 +224,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
             public void onChanged(@Nullable List<EnglishEntered> allEnglish) {
                 allTranslationsOfChosen.clear();            // clearing existing data
                 for (EnglishEntered english : allEnglish) {
-//                     can use these to check data of received records in console
-//                    System.out.println(english.getEnglish());
-
 
 //                    add received translations to allTranslationsOfChosen
 

@@ -1,11 +1,13 @@
 package lk.dinuka.translate;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -39,12 +41,24 @@ import static lk.dinuka.translate.MainActivity.languageCodes;
 public class DictionarySubscriptions extends AppCompatActivity {
     private LanguageTranslator translationService;          // translation service
 
-    private String translationLang;                 // Chosen language to translate phrases into
-    private String translationLanguageCode;             // used to pass in the translation code of the chosen language
-    private String translationText;                     // The English text that is required to be translated will be held in this variable
-    private String translatedText;              // The translated text in the desired language
+//    private String translationLang;                 // Chosen language to translate phrases into
+//    private String translationLanguageCode;             // used to pass in the translation code of the chosen language
+//    private String translationText;                     // The English text that is required to be translated will be held in this variable
+//    private String translatedText;              // The translated text in the desired language
+//
+//    private int updatingPosition;               // used to get the position of the phrase that's being translated, to update
 
-    private int updatingPosition;               // used to get the position of the phrase that's being translated, to update
+    // reference to SharedPreferences object
+    private SharedPreferences mPreferences;
+    // name of the sharedPrefFile
+    private String sharedPrefFile = "lk.dinuka.translate.translateLangs";
+
+    // Keys to get all Languages from sharedPreferences
+    final String LANG_ONE = "langOne";
+    final String LANG_TWO = "langTwo";
+    final String LANG_THREE = "langThree";
+    final String LANG_FOUR = "langFour";
+    final String LANG_FIVE = "langFive";
 
 
     private RecyclerView recyclerView;
@@ -61,6 +75,12 @@ public class DictionarySubscriptions extends AppCompatActivity {
 
         // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
         // with boolean value of subscribed
+
+        // ---------------------------------
+
+        // initialize the shared preferences
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
 
         // ---------------------------------
 
@@ -123,7 +143,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
         int totalPossibleLanguages = 5;     // the db supports 5 savable translation languages for now
 
         int totalSavedLanguages = 0;                // total saved languages
-        int totalRequiredToBeSaved = 0;             // newly added languages that haven't been saved before
+        int totalRequiredToBeSaved = 0;             // newly added languages that haven't been saved before & language that have to be removed
 
 
         for (String langName :
@@ -138,6 +158,9 @@ public class DictionarySubscriptions extends AppCompatActivity {
                 totalRequiredToBeSaved++;
             } else if (!entry.getValue() && (savedLanguages.contains(entry.getKey()))) {     // saved languages that have been requested to be removed
                 totalSavedLanguages--;
+
+                totalPossibleLanguages++;       // otherwise, the removed position won't be counted as an available slot for another language if 5 langs were already there
+                totalRequiredToBeSaved++;       // an update has been done
             }
         }
 
@@ -151,36 +174,110 @@ public class DictionarySubscriptions extends AppCompatActivity {
 
 
                 for (Map.Entry<String, Boolean> entry : savedLangChanges.entrySet()) {         //checking for all HashMap entries
-                    if (entry.getValue() && (savedLanguages.contains(entry.getKey()))) {             // languages that have already been saved & requested to be changed will be ignored
-                        savedLangChanges.remove(entry.getKey());
+                    if (entry.getValue() && (savedLanguages.contains(entry.getKey()))) {             // languages that have already been saved & requested to be saved will be ignored
+//                        savedLangChanges.remove(entry.getKey());
 
                     } else if (!entry.getValue() && (savedLanguages.contains(entry.getKey()))) {     // saved languages that have been requested to be removed
 
-                        // remove language from arrayList
-
                         // get shared preference position?
+                        int sharedPrefPositionOfLang = savedLanguages.indexOf(entry.getKey());         // savedLanguages arrayList position = shared preference position
 
                         // make all values of the column null in db - - - >
+                        removeTranslations(sharedPrefPositionOfLang);
+
 
                         // make position of shared preference null
+                        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+
+                        switch (sharedPrefPositionOfLang) {
+                            case 0:
+                                preferencesEditor.putString(LANG_ONE, null);
+                                break;
+                            case 1:
+                                preferencesEditor.putString(LANG_TWO, null);
+                                break;
+                            case 2:
+                                preferencesEditor.putString(LANG_THREE, null);
+                                break;
+                            case 3:
+                                preferencesEditor.putString(LANG_FOUR, null);
+                                break;
+                            case 4:
+                                preferencesEditor.putString(LANG_FIVE, null);
+                                break;
+                        }
+                        // .apply() saves the preferences asynchronously, off of the UI thread
+                        preferencesEditor.apply();
+
+
+                        // remove language from arrayList & temporary hashMap
+//                        savedLangChanges.remove(entry.getKey());
+
+                        savedLanguages.remove(sharedPrefPositionOfLang);
+                        savedLanguages.add(sharedPrefPositionOfLang,null);          // to maintain the size of the arrayList
 
                         displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
 
 
                     } else if (entry.getValue() && !(savedLanguages.contains(entry.getKey()))) {         // new languages that haven't been saved before
-                        // get available shared preference position -> has null value
+                        // since the availability of slots to save languages have been checked before, it's not necessary to check again here
 
-                        // add language name to share preference position
+                        // get available shared preference position -> has null value
+                        int freePosition = 0;
+                        for (int i = 0; i < savedLanguages.size(); i++){
+                            if (savedLanguages.get(i) == null){     // finding the first available position to store a language
+                                freePosition = i;
+//                                break;        // can add to the first available column if uncommented
+                            }
+                        }
+
+                            // add language name to shared preference position
+                        String langNameToBeAdded = entry.getKey();
+
+                        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+
+                        switch (freePosition) {
+                            case 0:
+                                preferencesEditor.putString(LANG_ONE, langNameToBeAdded);
+                                break;
+                            case 1:
+                                preferencesEditor.putString(LANG_TWO, langNameToBeAdded);
+                                break;
+                            case 2:
+                                preferencesEditor.putString(LANG_THREE, langNameToBeAdded);
+                                break;
+                            case 3:
+                                preferencesEditor.putString(LANG_FOUR, langNameToBeAdded);
+                                break;
+                            case 4:
+                                preferencesEditor.putString(LANG_FIVE, langNameToBeAdded);
+                                break;
+                        }
+                        // .apply() saves the preferences asynchronously, off of the UI thread
+                        preferencesEditor.apply();
+
+                        //        commit() method to synchronously save the preferences. It's discouraged as it can block other operations.
+
+
+                        // remove language from arrayList & temporary hashMap
+//                        savedLangChanges.remove(entry.getKey());
+
+                        savedLanguages.remove(freePosition);         // to maintain the size and desired positions of the arrayList
+
+                        // add the newly added language to the savedLanguages list
+                        savedLanguages.add(freePosition,langNameToBeAdded);
 
 
                         displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
 
                     } else {
                         //"No changes were requested to be made to the Language Subscriptions of the Dictionary."
-                        // not required to show the message here.
+                        // not required to show a message here.
                     }
 
                 }
+                // clear savedLangChanges hashMap when all changes are done
+                savedLangChanges.clear();
 
 
             } else {
@@ -188,19 +285,59 @@ public class DictionarySubscriptions extends AppCompatActivity {
 
 
             }
-        } else{
+        } else {
             displayToast("No changes were requested to be made to the Language Subscriptions of the Dictionary.");
         }
 
-        // check if savedLangChanges.get() = true and exisiting in savedLanguuages ArrayList. No need to make any changes then
+        // check if savedLangChanges.get() = true and existing in savedLanguages ArrayList. No need to make any changes then
     }
 
     public void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message,
                 Toast.LENGTH_SHORT).show();
     }
+
+
 //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
+
+    private void removeTranslations(final int selectedLanguagePosition) {         // used to remove all translations
+
+        // get all english phrases from db and display
+        final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
+
+        englishRepository.getEnglishFromDB().observe(this, new Observer<List<EnglishEntered>>() {
+            @Override
+            public void onChanged(@Nullable List<EnglishEntered> allEnglish) {
+                allTranslationsOfChosen.clear();            // clearing existing data
+                for (EnglishEntered english : allEnglish) {                             // clear all translations of specified language
+
+//                    use switch case to choose the desired language here
+                    switch (selectedLanguagePosition) {
+                        case 0:
+                            english.setTranslationLang0(null);
+                            break;
+                        case 1:
+                            english.setTranslationLang1(null);
+                            break;
+                        case 2:
+                            english.setTranslationLang2(null);
+                            break;
+                        case 3:
+                            english.setTranslationLang3(null);
+                            break;
+                        case 4:
+                            english.setTranslationLang4(null);
+                            break;
+                    }
+                    englishRepository.updateTask(english);       // update record
+
+                }
+            }
+        });
+
+    }
+
+
 //    private void saveTranslations() {
 //
 //        for (int n = 0; n < savedLanguages.size(); n++) {        // update translations of all translation languages
@@ -225,7 +362,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
 //
 //
 //    //-------------------
-//
+
 //    private LanguageTranslator initLanguageTranslatorService() {           // connect & initiate to the cloud translation service
 //        Authenticator authenticator = new IamAuthenticator("2daMreRDE8V5zPRO3enCVHGUCH1sQJs-Kdq8ryPn4-ij");
 //
@@ -276,7 +413,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
 ////                    System.out.println(englishEntered.getEnglish());
 //
 ////                    System.out.println(translatedPhrase+"```````````");
-//                    englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
+//                    englishEntered.setTranslationLang0(null);          // text to be changed
 ////                    System.out.println(englishEntered.getTranslationLang0());
 //
 //                    englishRepository.updateTask(englishEntered);       // update record
@@ -285,7 +422,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
 //
 //                }
 //            });
-//            System.out.println("~~~        updating complete       ~~~");
+//
 //        }
 //    }
 //
@@ -295,9 +432,9 @@ public class DictionarySubscriptions extends AppCompatActivity {
 //
 //        // translate using Watson Translator
 //        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-//        new TranslationTask().execute(translationText, translationLanguageCode);
+//        new TranslationTask().execute(null, translationLanguageCode);
 //    }
-//
-//    //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    //    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 }
