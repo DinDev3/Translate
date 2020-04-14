@@ -264,7 +264,7 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
                 mDisplayTranslation.setTextColor(Color.parseColor("#06032d"));
                 mDisplayTranslation.setBackgroundColor(Color.TRANSPARENT);
             } else{
-//                                colours are lost when the device is rotated----------_-_____-------_ -- - - - - -
+//                colours are lost when the device is rotated (not that important)
                 mDisplayTranslation.setText("The chosen language isn't currently supported. Please try another language");
                 mDisplayTranslation.setTextColor(Color.WHITE);
                 mDisplayTranslation.setBackgroundColor(Color.RED);

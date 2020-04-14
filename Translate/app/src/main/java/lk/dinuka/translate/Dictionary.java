@@ -16,10 +16,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,7 +72,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     // reference to SharedPreferences object
     private SharedPreferences mPreferences;
     // name of the sharedPrefFile
-    private String sharedPrefFile = "lk.dinuka.translate.translateLangs";
+    private String mSharedPrefFile = "lk.dinuka.translate.translateLangs";
 
     // Keys to get all Languages from sharedPreferences
     final String LANG_ONE = "langOne";
@@ -95,7 +98,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         // use shared preferences to get saved order of translations languages columns in db
 
         // initialize the shared preferences
-        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        mPreferences = getSharedPreferences(mSharedPrefFile, MODE_PRIVATE);
 
         mTranslationLangOne = mPreferences.getString(LANG_ONE, null);
         mTranslationLangTwo = mPreferences.getString(LANG_TWO, null);
@@ -229,9 +232,12 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     // ----------------------
     public void receiveData(final String selectedSpinnerLanguage) {        // used to display english phrase with one translation
         // get all english phrases from db and display
-        EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
+        final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
 
-        englishRepository.getEnglishFromDB().observe(this, new Observer<List<EnglishEntered>>() {
+        final LiveData<List<EnglishEntered>> englishResultObservable = englishRepository.getEnglishFromDB();
+
+
+        englishResultObservable.observe(this, new Observer<List<EnglishEntered>>() {
             @Override
             public void onChanged(@Nullable List<EnglishEntered> allEnglish) {
                 allTranslationsOfChosen.clear();            // clearing existing data
@@ -280,8 +286,11 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
                             break;
                     }
 //                    System.out.println(allTranslationsOfChosen);
-                    mAdapter.notifyDataSetChanged();        // display changes in recyclerview
                 }
+
+                englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
+
+                mAdapter.notifyDataSetChanged();        // display changes in recyclerview
             }
         });
     }
@@ -384,7 +393,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
-    //-------------------
 
     private void updateTranslation(String translationLang, String translationText) {
         // get the translation code of the chosen language
@@ -395,6 +403,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         new TranslationTask().execute(translationText, translationLanguageCode);
     }
 
+    //-------------------
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

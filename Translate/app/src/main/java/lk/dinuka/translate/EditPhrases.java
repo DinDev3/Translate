@@ -25,17 +25,17 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
     private MyEditAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private EditText chosenEditText;
-    String chosenPhrase;             // stores the chosen English word/ phrase to be edited
-    int chosenPosition;             // id of the chosenPhrase in the recyclerview. Used to update recyclerview
-    Boolean isEdit = false;                 // used to check whether the edit button has been pressed at least once
+    private EditText mChosenEditText;
+    private String chosenPhrase;             // stores the chosen English word/ phrase to be edited
+    private int chosenPosition;             // id of the chosenPhrase in the recyclerview. Used to update recyclerview
+    private Boolean isEdit = false;                 // used to check whether the edit button has been pressed at least once
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_phrases);
 
-        chosenEditText = findViewById(R.id.editText_plainText);
+        mChosenEditText = findViewById(R.id.editText_plainText);
 
 
         // get all English phrases from db and display
@@ -94,7 +94,7 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
         if (chosenPhrase != null) {
             isEdit = true;          // edit button pressed at least once
 
-            chosenEditText.setText(chosenPhrase);
+            mChosenEditText.setText(chosenPhrase);
         } else {
             displayToast("Choose a word/ phrase to be translated");
         }
@@ -117,7 +117,7 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
 
         if (chosenPhrase != null) {
             //get change in text from text currently in EditText box
-            final String updatedPhrase = chosenEditText.getText().toString();
+            final String updatedPhrase = mChosenEditText.getText().toString();
             System.out.println(updatedPhrase);            // to test
 
             if (updatedPhrase.length() != 0) {              // The phrase/ word has to be replaced with another. Can't be emptied
@@ -177,7 +177,7 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
         // Therefore, can't get the id in the db from here
 
         if (isEdit) {
-            chosenEditText.setText(chosenPhrase);           // display chosen text in plainTextView
+            mChosenEditText.setText(chosenPhrase);           // display chosen text in plainTextView
         }
     }
 

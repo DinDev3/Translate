@@ -46,7 +46,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
     // reference to SharedPreferences object
     private SharedPreferences mPreferences;
     // name of the sharedPrefFile
-    private String sharedPrefFile = "lk.dinuka.translate.translateLangs";
+    private String mSharedPrefFile = "lk.dinuka.translate.translateLangs";
 
     // Keys to get all Languages from sharedPreferences
     final String LANG_ONE = "langOne";
@@ -71,7 +71,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
         // ---------------------------------
 
         // initialize the shared preferences
-        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        mPreferences = getSharedPreferences(mSharedPrefFile, MODE_PRIVATE);
 
 
         // ---------------------------------

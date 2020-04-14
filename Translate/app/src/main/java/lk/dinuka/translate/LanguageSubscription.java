@@ -54,35 +54,16 @@ public class LanguageSubscription extends AppCompatActivity {
         // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
         // with boolean value of subscribed
 
-        // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
-        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-        new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
 
-
-        // ---------------------------------
-
-        recyclerView = findViewById(R.id.language_sub_recycler_view);
-
-
-        recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
-
-        // Use a linear layout within the recycler view
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-
-        List<String> allForeignLanguages = new ArrayList<>();
-
-
-        for (Map.Entry<String, Boolean> entry : foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
-            allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
+        if (isNetworkAvailable()) {
+            // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
+            translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+            new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
+        } else {
+            displayToast("An internet connection is required to import the languages.");
         }
 
-        Collections.sort(allForeignLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
-
-        // specify the adapter (a bridge between a UI component and a data source)
-        mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
-        recyclerView.setAdapter(mAdapter);
+        // ---------------------------------
 
         // ---------------------------------
 
@@ -107,6 +88,36 @@ public class LanguageSubscription extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        recyclerView = findViewById(R.id.language_sub_recycler_view);
+
+
+        recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
+
+        // Use a linear layout within the recycler view
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+        List<String> allForeignLanguages = new ArrayList<>();
+
+
+        for (Map.Entry<String, String> entry : languageCodes.entrySet()) {         //checking for all HashMap entries
+            allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
+        }
+
+        Collections.sort(allForeignLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
+
+        // specify the adapter (a bridge between a UI component and a data source)
+        mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
+        recyclerView.setAdapter(mAdapter);
+
+    }
 
     public void updateLanguages(View view) {            // update database with new subscription status
         // save boolean statuses of all changed languages
@@ -186,15 +197,12 @@ public class LanguageSubscription extends AppCompatActivity {
 //                System.out.println(langName+": "+langCode);     // to check
 
                 if (!languageCodes.containsKey(langName)) {
-                    if (isNetworkAvailable()) {
-                        // add each of these into the entity ForeignLanguage of the database
-                        ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
-                        foreignRepository.insertTask(langName, langCode);
+                    // add each of these into the entity ForeignLanguage of the database
+                    ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
+                    foreignRepository.insertTask(langName, langCode);
 
-                        languageCodes.put(langName, langCode);       // saving lang names and codes in HashMap
-                    } else {
-                        displayToast("An internet connection is required to import the languages.");
-                    }
+                    languageCodes.put(langName, langCode);       // saving lang names and codes in HashMap
+                    foreignLanguageSubs.put(langName, false);         // needed only for the first time
                 }
                 // extra modification---
                 // store all the language names/ codes in an arrayList -> check if the language exists in the system db and add the languages
