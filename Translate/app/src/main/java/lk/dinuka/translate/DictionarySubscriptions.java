@@ -41,13 +41,6 @@ import static lk.dinuka.translate.MainActivity.languageCodes;
 public class DictionarySubscriptions extends AppCompatActivity {
     private LanguageTranslator translationService;          // translation service
 
-//    private String translationLang;                 // Chosen language to translate phrases into
-//    private String translationLanguageCode;             // used to pass in the translation code of the chosen language
-//    private String translationText;                     // The English text that is required to be translated will be held in this variable
-//    private String translatedText;              // The translated text in the desired language
-//
-//    private int updatingPosition;               // used to get the position of the phrase that's being translated, to update
-
     // reference to SharedPreferences object
     private SharedPreferences mPreferences;
     // name of the sharedPrefFile
@@ -72,9 +65,6 @@ public class DictionarySubscriptions extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_subscriptions);
-
-        // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
-        // with boolean value of subscribed
 
         // ---------------------------------
 
@@ -108,29 +98,6 @@ public class DictionarySubscriptions extends AppCompatActivity {
         // specify the adapter (a bridge between a UI component and a data source)
         mAdapter = new MyDicSubsAdapter(availableLanguages);          // insert list of languages
         recyclerView.setAdapter(mAdapter);
-
-        // ---------------------------------
-//
-//        if (savedInstanceState != null) {     // shared preferences can take care of this
-//
-//            ArrayList<String> foreignLangs = new ArrayList<>();
-//            boolean[] foreignSubs = new boolean[savedLangChanges.size()];
-//
-//            foreignLangs = savedInstanceState.getStringArrayList("lang_changes");
-//            foreignSubs = savedInstanceState.getBooleanArray("subs_changes");
-//
-//            if (foreignLangs != null) {
-//                if (foreignSubs != null) {      // avoiding null pointer exceptions
-//                    for (int i = 0; i < foreignLangs.size(); i++) {
-//                        savedLangChanges.put(foreignLangs.get(i), foreignSubs[i]);
-//                    }
-//                }
-//            }
-////            System.out.println(foreignSubChanges);
-////            mAdapter.notifyDataSetChanged();
-//            // pass in this arraylist into the constructor of the adapter as well>>>>>???
-//        }
-
 
     }
 
@@ -216,7 +183,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
                         savedLanguages.remove(sharedPrefPositionOfLang);
                         savedLanguages.add(sharedPrefPositionOfLang,null);          // to maintain the size of the arrayList
 
-                        displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+                        displayToast("Languages have been successfully updated.");
 
 
                     } else if (entry.getValue() && !(savedLanguages.contains(entry.getKey()))) {         // new languages that haven't been saved before
@@ -268,7 +235,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
                         savedLanguages.add(freePosition,langNameToBeAdded);
 
 
-                        displayToast("~~~~~~~~~~~~~~~~~~~updating of languages should be done successfully~~~~~~~~~~~~~~~~~~~~~~~~");
+                        displayToast("Languages have been successfully updated.");
 
                     } else {
                         //"No changes were requested to be made to the Language Subscriptions of the Dictionary."
@@ -349,7 +316,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
 //
 //                    translationText = allEnglishFromDB.get(i);      // get each english word stored in the arrayList of all english words
 //
-////           pass in translationLang here>>>>>>>>>>>>>>>>>>>>>>>>>
+////           pass in translationLang here>>>>>>>>
 //                    translationLang = savedLanguages.get(n);
 //
 //                    translateEnglishPhrase(translationLang);
