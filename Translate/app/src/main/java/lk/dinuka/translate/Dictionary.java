@@ -109,7 +109,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         }
 
 
-//        receiveData();
 
         // open activity Dictionary Language Subscriptions List
         Button showLangListButton = findViewById(R.id.subscribe_button);
