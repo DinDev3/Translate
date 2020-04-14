@@ -7,8 +7,13 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
@@ -109,7 +115,6 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         }
 
 
-
         // open activity Dictionary Language Subscriptions List
         Button showLangListButton = findViewById(R.id.subscribe_button);
         showLangListButton.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +150,7 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
         for (String langName :
                 savedLanguages) {
-            if (langName!=null){        // if null, arrayAdapter of spinner gives null pointer
+            if (langName != null) {        // if null, arrayAdapter of spinner gives null pointer
                 spinnerLanguages.add(langName);
             }
         }
@@ -195,17 +200,31 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
 
 
     public void updateRecords(View view) {      // update translations of newly added english phrases into the db
-        translationLang = selectedSpinnerLanguage;
-        updatingPosition = 0;       // resetting update position
+        if (isNetworkAvailable()) {
+            translationLang = selectedSpinnerLanguage;
+            updatingPosition = 0;       // resetting update position
 
 
-        for (int i = 0; i < allEnglishFromDB.size(); i++) {
-            updateTranslation(translationLang, allEnglishFromDB.get(i));            // update translations in db
+            for (int i = 0; i < allEnglishFromDB.size(); i++) {
+                updateTranslation(translationLang, allEnglishFromDB.get(i));            // update translations in db
+            }
+        } else {
+            displayToast("An internet connection is required to update translations.");
         }
 
 //        System.out.println("**"+allTranslationsOfChosen);
     }
 
+    public void displayToast(String message) {
+        Toast toast = Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT);
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(Color.parseColor("#56ccf2"), PorterDuff.Mode.SRC_IN);
+
+        toast.show();
+    }
 
     // ----------------------
     public void receiveData(final String selectedSpinnerLanguage) {        // used to display english phrase with one translation
@@ -292,67 +311,76 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
                     .target(params[1])    // pass in translationLanguage here, to get required language
                     .build();
 
-            TranslationResult result = translationService.translate(translateOptions).execute().getResult();
+            try {
+                TranslationResult result = translationService.translate(translateOptions).execute().getResult();
 
-            String firstTranslation = result.getTranslations().get(0).getTranslation();
-
-            return firstTranslation;
+                String firstTranslation = result.getTranslations().get(0).getTranslation();
+                return firstTranslation;
+            } catch (Exception e) {
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(String translatedText) {       // update one phrase at a time
             super.onPostExecute(translatedText);
-            final String translatedPhrase = translatedText;               // translated phrase in desired language
 
-            final String translationPhrase = allEnglishFromDB.get(updatingPosition);      // get each english word stored in the arrayList of all english words
+            if (translatedText != null) {
+                final String translatedPhrase = translatedText;               // translated phrase in desired language
 
 
-            // update translations in db ----------
+                final String translationPhrase = allEnglishFromDB.get(updatingPosition);      // get each english word stored in the arrayList of all english words
 
-            // get one english phrase from db
-            final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
 
-            final LiveData<EnglishEntered> englishResultObservable = englishRepository.getEnglishByEnglish(translationPhrase);
+                // update translations in db ----------
 
-            englishResultObservable.observe(Dictionary.this, new Observer<EnglishEntered>() {
-                @Override
-                public void onChanged(EnglishEntered englishEntered) {
+                // get one english phrase from db
+                final EnglishRepository englishRepository = new EnglishRepository(getApplicationContext());
+
+                final LiveData<EnglishEntered> englishResultObservable = englishRepository.getEnglishByEnglish(translationPhrase);
+
+                englishResultObservable.observe(Dictionary.this, new Observer<EnglishEntered>() {
+                    @Override
+                    public void onChanged(EnglishEntered englishEntered) {
 //                    System.out.println(englishEntered.getEnglish());
 
 //                    need to use switch statement here to place the update in the proper column of the table>>>>>>>>>>>>>>
 
-                    int translationLangPosition = savedLanguages.indexOf(translationLang);
-                    switch (translationLangPosition) {
-                        case 0:
-                            englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
+                        int translationLangPosition = savedLanguages.indexOf(translationLang);
+                        switch (translationLangPosition) {
+                            case 0:
+                                englishEntered.setTranslationLang0(translatedPhrase);          // text to be changed
 //                            System.out.println(englishEntered.getTranslationLang0());
-                            break;
-                        case 1:
-                            englishEntered.setTranslationLang1(translatedPhrase);          // text to be changed
+                                break;
+                            case 1:
+                                englishEntered.setTranslationLang1(translatedPhrase);          // text to be changed
 //                            System.out.println(englishEntered.getTranslationLang1());
-                            break;
-                        case 2:
-                            englishEntered.setTranslationLang2(translatedPhrase);          // text to be changed
+                                break;
+                            case 2:
+                                englishEntered.setTranslationLang2(translatedPhrase);          // text to be changed
 //                            System.out.println(englishEntered.getTranslationLang2());
-                            break;
-                        case 3:
-                            englishEntered.setTranslationLang3(translatedPhrase);          // text to be changed
+                                break;
+                            case 3:
+                                englishEntered.setTranslationLang3(translatedPhrase);          // text to be changed
 //                            System.out.println(englishEntered.getTranslationLang3());
-                            break;
-                        case 4:
-                            englishEntered.setTranslationLang4(translatedPhrase);          // text to be changed
+                                break;
+                            case 4:
+                                englishEntered.setTranslationLang4(translatedPhrase);          // text to be changed
 //                            System.out.println(englishEntered.getTranslationLang4());
-                            break;
+                                break;
+                        }
+
+                        englishRepository.updateTask(englishEntered);       // update record
+
+                        englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
+
                     }
+                });
 
-                    englishRepository.updateTask(englishEntered);       // update record
-
-                    englishResultObservable.removeObserver(this);           // to stop retrieving the result repeatedly after getting it once
-
-                }
-            });
-
-            updatingPosition++;
+                updatingPosition++;
+            } else {
+                // translation can't be done for this language
+            }
         }
     }
 
@@ -366,4 +394,13 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
         new TranslationTask().execute(translationText, translationLanguageCode);
     }
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
 }

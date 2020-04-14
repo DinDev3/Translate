@@ -7,6 +7,11 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -155,8 +160,14 @@ public class LanguageSubscription extends AppCompatActivity {
 
     // --------------------------------------------------------------------
     public void displayToast(String message) {
-        Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT);
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(Color.parseColor("#56ccf2"), PorterDuff.Mode.SRC_IN);
+
+        toast.show();
     }
 
     private class ReceiveIdentifiableLanguagesFromAPI extends AsyncTask<String, Void, String> {     // get all available languages form the API at the beginning
@@ -175,11 +186,15 @@ public class LanguageSubscription extends AppCompatActivity {
 //                System.out.println(langName+": "+langCode);     // to check
 
                 if (!languageCodes.containsKey(langName)) {
-                    // add each of these into the entity ForeignLanguage of the database
-                    ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
-                    foreignRepository.insertTask(langName, langCode);
+                    if (isNetworkAvailable()) {
+                        // add each of these into the entity ForeignLanguage of the database
+                        ForeignRepository foreignRepository = new ForeignRepository(getApplicationContext());
+                        foreignRepository.insertTask(langName, langCode);
 
-                    languageCodes.put(langName, langCode);       // saving lang names and codes in HashMap
+                        languageCodes.put(langName, langCode);       // saving lang names and codes in HashMap
+                    } else {
+                        displayToast("An internet connection is required to import the languages.");
+                    }
                 }
                 // extra modification---
                 // store all the language names/ codes in an arrayList -> check if the language exists in the system db and add the languages
@@ -218,5 +233,13 @@ public class LanguageSubscription extends AppCompatActivity {
         outState.putBooleanArray("subs_changes", foreignSubs);
 
 //        System.out.println(foreignSubChanges);
+    }
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
