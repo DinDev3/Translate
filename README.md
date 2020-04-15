@@ -19,7 +19,7 @@ The user can view the translated text of his/ her desired language and also list
 Displayed below is the Home screen of the **Translate**
 ![main_screen](docs/resources/main_screen.png)
 
-The 5 options shown in the main screen opens the following screens:
+The 6 options shown in the main screen opens the following screens:
 - **DICTIONARY:** Save all translations of multiple languages for offline use and view them when offline.
 - **ADD PHRASES:** Add new words/ phrases into the local database.
 - **DISPLAY PHRASES:** Display all the words/ phrases that have been saved locally.
