@@ -10,8 +10,10 @@ The user can view the translated text of his/ her desired language and also list
 ## Technology behind Doggo Match
 1. Development IDE - Android Studio 3.6.2
 2. Main development language – Java &amp; XML
-3. Tested AVDs - Pixel 3, Nexus 5X
-4. Tested API Level - API 29
+3. Database - SQLite with **Room** Persistence Library
+4. Tested AVDs - Pixel 3, Nexus 5X
+5. Tested API Level - API 29
+
 
 ## Home Screen of Translate app
 Displayed below is the Home screen of the **Translate**
@@ -45,9 +47,6 @@ Landscape layouts were created for all the screens.
 
 ---
 
-
-### Database
-- SQLite with Room Library
 
 ### Software used to design UI elements
 - Figma
