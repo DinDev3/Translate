@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import lk.dinuka.translate.databases.english.EnglishEntered;
-import lk.dinuka.translate.databases.english.EnglishRepository;
+import lk.dinuka.translate.databases.entities.EnglishEntered;
+import lk.dinuka.translate.databases.repositories.EnglishRepository;
 import lk.dinuka.translate.services.MyEditAdapter;
 
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;

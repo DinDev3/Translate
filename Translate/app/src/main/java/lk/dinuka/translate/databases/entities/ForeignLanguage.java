@@ -1,4 +1,4 @@
-package lk.dinuka.translate.databases.foreign;
+package lk.dinuka.translate.databases.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

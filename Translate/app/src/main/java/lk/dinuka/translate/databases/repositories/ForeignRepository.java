@@ -1,4 +1,4 @@
-package lk.dinuka.translate.databases.foreign;
+package lk.dinuka.translate.databases.repositories;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,6 +9,7 @@ import androidx.room.Room;
 import java.util.List;
 
 import lk.dinuka.translate.databases.TranslationDB;
+import lk.dinuka.translate.databases.entities.ForeignLanguage;
 import lk.dinuka.translate.util.AppUtils;
 
 public class ForeignRepository {

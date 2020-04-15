@@ -3,10 +3,10 @@ package lk.dinuka.translate.databases;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import lk.dinuka.translate.databases.english.EnglishDAO;
-import lk.dinuka.translate.databases.english.EnglishEntered;
-import lk.dinuka.translate.databases.foreign.ForeignDAO;
-import lk.dinuka.translate.databases.foreign.ForeignLanguage;
+import lk.dinuka.translate.databases.DAOs.EnglishDAO;
+import lk.dinuka.translate.databases.entities.EnglishEntered;
+import lk.dinuka.translate.databases.DAOs.ForeignDAO;
+import lk.dinuka.translate.databases.entities.ForeignLanguage;
 
 @Database(entities = {EnglishEntered.class, ForeignLanguage.class}, version = 1)
 public abstract class TranslationDB extends RoomDatabase {

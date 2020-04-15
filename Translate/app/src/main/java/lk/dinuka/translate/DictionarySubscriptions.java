@@ -2,7 +2,6 @@ package lk.dinuka.translate;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,35 +9,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.ibm.cloud.sdk.core.security.Authenticator;
-import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.language_translator.v3.LanguageTranslator;
-import com.ibm.watson.language_translator.v3.model.TranslateOptions;
-import com.ibm.watson.language_translator.v3.model.TranslationResult;
-import com.ibm.watson.language_translator.v3.util.Language;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lk.dinuka.translate.databases.english.EnglishEntered;
-import lk.dinuka.translate.databases.english.EnglishRepository;
+import lk.dinuka.translate.databases.entities.EnglishEntered;
+import lk.dinuka.translate.databases.repositories.EnglishRepository;
 import lk.dinuka.translate.services.MyDicSubsAdapter;
-import lk.dinuka.translate.services.MyLanguageAdapter;
 
 import static lk.dinuka.translate.Dictionary.allTranslationsOfChosen;
 import static lk.dinuka.translate.Dictionary.savedLangChanges;
 import static lk.dinuka.translate.Dictionary.savedLanguages;
-import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
-import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class DictionarySubscriptions extends AppCompatActivity {
     private LanguageTranslator translationService;          // translation service

@@ -1,4 +1,4 @@
-package lk.dinuka.translate.databases.english;
+package lk.dinuka.translate.databases.DAOs;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -8,6 +8,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
+
+import lk.dinuka.translate.databases.entities.EnglishEntered;
 
 @Dao
 public interface EnglishDAO {

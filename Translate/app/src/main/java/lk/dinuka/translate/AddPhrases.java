@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import java.util.Collections;
 
-import lk.dinuka.translate.databases.english.EnglishRepository;
+import lk.dinuka.translate.databases.repositories.EnglishRepository;
 
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 

@@ -16,14 +16,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,13 +34,11 @@ import com.ibm.watson.language_translator.v3.model.TranslationResult;
 import com.ibm.watson.language_translator.v3.util.Language;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import lk.dinuka.translate.databases.english.EnglishEntered;
-import lk.dinuka.translate.databases.english.EnglishRepository;
+import lk.dinuka.translate.databases.entities.EnglishEntered;
+import lk.dinuka.translate.databases.repositories.EnglishRepository;
 import lk.dinuka.translate.services.MyDictionaryAdapter;
 
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;

@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lk.dinuka.translate.databases.foreign.ForeignLanguage;
-import lk.dinuka.translate.databases.foreign.ForeignRepository;
+import lk.dinuka.translate.databases.entities.ForeignLanguage;
+import lk.dinuka.translate.databases.repositories.ForeignRepository;
 import lk.dinuka.translate.services.MyLanguageAdapter;
 
 import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;

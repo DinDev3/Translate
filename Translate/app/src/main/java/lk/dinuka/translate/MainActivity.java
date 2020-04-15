@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import lk.dinuka.translate.databases.english.EnglishEntered;
-import lk.dinuka.translate.databases.english.EnglishRepository;
-import lk.dinuka.translate.databases.foreign.ForeignLanguage;
-import lk.dinuka.translate.databases.foreign.ForeignRepository;
+import lk.dinuka.translate.databases.entities.EnglishEntered;
+import lk.dinuka.translate.databases.repositories.EnglishRepository;
+import lk.dinuka.translate.databases.entities.ForeignLanguage;
+import lk.dinuka.translate.databases.repositories.ForeignRepository;
 
 
 public class MainActivity extends AppCompatActivity {
