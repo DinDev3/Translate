@@ -206,9 +206,10 @@ LiveData Observable
 https://stackoverflow.com/questions/51085165/livedata-keeps-observing-even-after-calling-removeobserver/51209033#51209033
 
 Passing chosen position from adapter to parent activity
-RecyclerView OnClickListener (Best practice way)
+https://www.youtube.com/watch?v=69C1ljfDvl0
 
 updating recycler view after updating record
 https://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
 
+https://www.zoftino.com/android-recyclerview-radiobutton
  */
