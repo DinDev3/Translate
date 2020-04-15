@@ -5,6 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -137,9 +142,13 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
 //        translationText = "Hello World";          // hard coded dummy value for testing
             if (translationText != null) {
 
-                // translate using Watson Translator
-                translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-                new TranslationTask().execute(translationText, translationLanguageCode);
+                if (isNetworkAvailable()) {
+                    // translate using Watson Translator
+                    translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+                    new TranslationTask().execute(translationText, translationLanguageCode);
+                } else{
+                    displayToast("An internet connection is required.");
+                }
 
             } else {
                 displayToast("Choose a word/ phrase to be translated.");
@@ -154,16 +163,29 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         if (translationText != null) {       // a translation should be done first
             textService = initTextToSpeechService();           // connect & initiate to the cloud text to speech service
 
-            // speak displayed translation
-            new SynthesisTask().execute(mDisplayTranslation.getText().toString(), EN_US_LISAVOICE);
+            if (isNetworkAvailable()) {
+                // speak displayed translation
+                new SynthesisTask().execute(mDisplayTranslation.getText().toString(), EN_US_LISAVOICE);
+            } else{
+                displayToast("An internet connection is required.");
+            }
+
+        } else{
+            displayToast("Translate a phrase first.");
         }
     }
 
 
     // ---------------------
     public void displayToast(String message) {
-        Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT);
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(Color.parseColor("#56ccf2"), PorterDuff.Mode.SRC_IN);
+
+        toast.show();
     }
 
 
@@ -224,17 +246,29 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
                     .target(params[1])    // pass in translationLanguage here, to get required language
                     .build();
 
-            TranslationResult result = translationService.translate(translateOptions).execute().getResult();
+            try {
+                TranslationResult result = translationService.translate(translateOptions).execute().getResult();
 
-            String firstTranslation = result.getTranslations().get(0).getTranslation();
-
-            return firstTranslation;
+                String firstTranslation = result.getTranslations().get(0).getTranslation();
+                return firstTranslation;
+            } catch (Exception e){
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(String translatedText) {
             super.onPostExecute(translatedText);
-            mDisplayTranslation.setText(translatedText);
+            if(translatedText!=null) {
+                mDisplayTranslation.setText(translatedText);
+                mDisplayTranslation.setTextColor(Color.parseColor("#06032d"));
+                mDisplayTranslation.setBackgroundColor(Color.TRANSPARENT);
+            } else{
+//                colours are lost when the device is rotated (not that important)
+                mDisplayTranslation.setText("The chosen language isn't currently supported. Please try another language");
+                mDisplayTranslation.setTextColor(Color.WHITE);
+                mDisplayTranslation.setBackgroundColor(Color.RED);
+            }
         }
     }
 
@@ -273,5 +307,13 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         outState.putInt("chosen_position", position);              // saving position of chosen
 
         outState.putString("translation_text", translationText);        // needed to get the position when rotating back
+    }
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

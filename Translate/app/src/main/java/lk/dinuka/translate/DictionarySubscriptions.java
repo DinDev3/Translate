@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -44,7 +46,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
     // reference to SharedPreferences object
     private SharedPreferences mPreferences;
     // name of the sharedPrefFile
-    private String sharedPrefFile = "lk.dinuka.translate.translateLangs";
+    private String mSharedPrefFile = "lk.dinuka.translate.translateLangs";
 
     // Keys to get all Languages from sharedPreferences
     final String LANG_ONE = "langOne";
@@ -69,7 +71,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
         // ---------------------------------
 
         // initialize the shared preferences
-        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        mPreferences = getSharedPreferences(mSharedPrefFile, MODE_PRIVATE);
 
 
         // ---------------------------------
@@ -134,7 +136,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
         int totalSavableChanges = totalPossibleLanguages - totalSavedLanguages;     // total languages that can be saved
 
         if (totalRequiredToBeSaved > 0) {
-            if (totalSavedLanguages == 0) {
+            if (totalSavedLanguages == 5) {
                 displayToast("Currently, the app supports saving up to 5 languages. You have reached the limit of the number of languages that can be saved.");
 
             } else if (totalSavableChanges >= totalRequiredToBeSaved) {     // this will check whether any more languages can be added
@@ -260,8 +262,14 @@ public class DictionarySubscriptions extends AppCompatActivity {
     }
 
     public void displayToast(String message) {
-        Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT);
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(Color.parseColor("#56ccf2"), PorterDuff.Mode.SRC_IN);
+
+        toast.show();
     }
 
 

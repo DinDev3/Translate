@@ -7,6 +7,11 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -49,35 +54,16 @@ public class LanguageSubscription extends AppCompatActivity {
         // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
         // with boolean value of subscribed
 
-        // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
-        translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
-        new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
 
-
-        // ---------------------------------
-
-        recyclerView = findViewById(R.id.language_sub_recycler_view);
-
-
-        recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
-
-        // Use a linear layout within the recycler view
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-
-        List<String> allForeignLanguages = new ArrayList<>();
-
-
-        for (Map.Entry<String, Boolean> entry : foreignLanguageSubs.entrySet()) {         //checking for all HashMap entries
-            allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
+        if (isNetworkAvailable()) {
+            // Receive all translatable languages using Watson Translator - [Needs to be done only if there was a change/addition in translatable languages]
+            translationService = initLanguageTranslatorService();           // connect & initiate to the cloud translation service
+            new LanguageSubscription.ReceiveIdentifiableLanguagesFromAPI().execute();
+        } else {
+            displayToast("An internet connection is required to import the languages.");
         }
 
-        Collections.sort(allForeignLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
-
-        // specify the adapter (a bridge between a UI component and a data source)
-        mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
-        recyclerView.setAdapter(mAdapter);
+        // ---------------------------------
 
         // ---------------------------------
 
@@ -102,6 +88,36 @@ public class LanguageSubscription extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        recyclerView = findViewById(R.id.language_sub_recycler_view);
+
+
+        recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView
+
+        // Use a linear layout within the recycler view
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+        List<String> allForeignLanguages = new ArrayList<>();
+
+
+        for (Map.Entry<String, String> entry : languageCodes.entrySet()) {         //checking for all HashMap entries
+            allForeignLanguages.add(entry.getKey());              //adding language name into allForeignLanguages arrayList
+        }
+
+        Collections.sort(allForeignLanguages);      // sort all languages in alphabetical order (because HashMap has no order)
+
+        // specify the adapter (a bridge between a UI component and a data source)
+        mAdapter = new MyLanguageAdapter(allForeignLanguages);          // insert list of languages
+        recyclerView.setAdapter(mAdapter);
+
+    }
 
     public void updateLanguages(View view) {            // update database with new subscription status
         // save boolean statuses of all changed languages
@@ -155,8 +171,14 @@ public class LanguageSubscription extends AppCompatActivity {
 
     // --------------------------------------------------------------------
     public void displayToast(String message) {
-        Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT);
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(Color.parseColor("#56ccf2"), PorterDuff.Mode.SRC_IN);
+
+        toast.show();
     }
 
     private class ReceiveIdentifiableLanguagesFromAPI extends AsyncTask<String, Void, String> {     // get all available languages form the API at the beginning
@@ -180,6 +202,7 @@ public class LanguageSubscription extends AppCompatActivity {
                     foreignRepository.insertTask(langName, langCode);
 
                     languageCodes.put(langName, langCode);       // saving lang names and codes in HashMap
+                    foreignLanguageSubs.put(langName, false);         // needed only for the first time
                 }
                 // extra modification---
                 // store all the language names/ codes in an arrayList -> check if the language exists in the system db and add the languages
@@ -218,5 +241,13 @@ public class LanguageSubscription extends AppCompatActivity {
         outState.putBooleanArray("subs_changes", foreignSubs);
 
 //        System.out.println(foreignSubChanges);
+    }
+
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
