@@ -19,10 +19,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +50,17 @@ import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class Dictionary extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
+
+    FrameLayout progressBarHolder;
+
+    private Button mShowRecordsButton;
+    private Button mChooseLangButton;
+    private Button mUpdateRecordsButton;
+    private Spinner mLangSelectionSpinner;
+
 
     private RecyclerView recyclerView;
     private MyDictionaryAdapter mAdapter;
@@ -94,6 +107,13 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
 
+        progressBarHolder = (FrameLayout) findViewById(R.id.progressBarHolder);
+
+        mShowRecordsButton = findViewById(R.id.show_records_button);
+        mChooseLangButton = findViewById(R.id.subscribe_button);
+        mUpdateRecordsButton = findViewById(R.id.update_records_button);
+
+        mLangSelectionSpinner = findViewById(R.id.dic_language_spinner);
 
         // use shared preferences to get saved order of translations languages columns in db
 
@@ -331,6 +351,21 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            mChooseLangButton.setEnabled(false);
+            mShowRecordsButton.setEnabled(false);
+            mUpdateRecordsButton.setEnabled(false);
+            mLangSelectionSpinner.setEnabled(false);
+
+            inAnimation = new AlphaAnimation(0f, 1f);
+            inAnimation.setDuration(200);
+            progressBarHolder.setAnimation(inAnimation);
+            progressBarHolder.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected void onPostExecute(String translatedText) {       // update one phrase at a time
             super.onPostExecute(translatedText);
 
@@ -387,6 +422,19 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
                 });
 
                 updatingPosition++;
+
+                if (updatingPosition == allEnglishFromDB.size()) {
+                    outAnimation = new AlphaAnimation(1f, 0f);
+                    outAnimation.setDuration(200);
+                    progressBarHolder.setAnimation(outAnimation);
+                    progressBarHolder.setVisibility(View.GONE);
+
+                    mUpdateRecordsButton.setEnabled(true);
+                    mShowRecordsButton.setEnabled(true);
+                    mChooseLangButton.setEnabled(true);
+                    mLangSelectionSpinner.setEnabled(true);
+                }
+
             } else {
                 // translation can't be done for this language
             }

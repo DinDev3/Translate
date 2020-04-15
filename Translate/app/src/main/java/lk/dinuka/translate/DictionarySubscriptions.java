@@ -136,7 +136,7 @@ public class DictionarySubscriptions extends AppCompatActivity {
         int totalSavableChanges = totalPossibleLanguages - totalSavedLanguages;     // total languages that can be saved
 
         if (totalRequiredToBeSaved > 0) {
-            if (totalSavedLanguages == 0) {
+            if (totalSavedLanguages == 5) {
                 displayToast("Currently, the app supports saving up to 5 languages. You have reached the limit of the number of languages that can be saved.");
 
             } else if (totalSavableChanges >= totalRequiredToBeSaved) {     // this will check whether any more languages can be added
