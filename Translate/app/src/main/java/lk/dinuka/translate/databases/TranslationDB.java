@@ -16,3 +16,11 @@ public abstract class TranslationDB extends RoomDatabase {
     public abstract EnglishDAO englishDAO();
     public abstract ForeignDAO foreignDAO();
 }
+
+/*
+References:
+https://android.jlelse.eu/5-steps-to-implement-room-persistence-library-in-android-47b10cd47b24
+https://medium.com/@tonia.tkachuk/android-app-example-using-room-database-63f7091e69af
+https://github.com/anitaa1990/RoomDb-Sample/blob/master/app/src/main/java/com/an/room/ui/activity/NotesListActivity.java
+
+ */
