@@ -69,3 +69,14 @@ public class DisplayPhrases extends AppCompatActivity {
         mAdapter.filteredResults(filteredPhraseList);        // sending filtered list into adapter
     }
 }
+
+/*
+References:
+Recycler-view
+https://stackoverflow.com/questions/25477860/error-inflating-class-android-support-v7-widget-recyclerview
+
+https://developer.android.com/guide/topics/ui/layout/recyclerview
+https://www.javatpoint.com/android-recyclerview-list-example
+
+https://stackoverflow.com/questions/47455203/recyclerview-in-constraintlayout-overlapping-other-elements
+ */

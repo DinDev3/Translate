@@ -59,3 +59,10 @@ public class AddPhrases extends AppCompatActivity {
         toast.show();
     }
 }
+
+/*
+References:
+change toast color
+https://stackoverflow.com/a/49010394/11005638
+
+ */

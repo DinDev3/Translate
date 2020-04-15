@@ -199,3 +199,16 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
         outState.putInt("chosen_position", chosenPosition);              // saving position of chosen
     }
 }
+
+/*
+References:
+LiveData Observable
+https://stackoverflow.com/questions/51085165/livedata-keeps-observing-even-after-calling-removeobserver/51209033#51209033
+
+Passing chosen position from adapter to parent activity
+RecyclerView OnClickListener (Best practice way)
+
+updating recycler view after updating record
+https://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
+
+ */

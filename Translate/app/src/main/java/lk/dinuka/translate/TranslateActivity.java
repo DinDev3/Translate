@@ -317,3 +317,15 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
+
+/*
+References:
+Spinner with dynamic content
+https://stackoverflow.com/questions/11564891/android-dynamic-spinner
+
+https://proandroiddev.com/android-autosizing-textviews-their-pitfalls-and-what-to-do-about-them-eeb8958fa3db
+
+Detect if internet is connected
+https://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
+
+ */

@@ -251,3 +251,12 @@ public class LanguageSubscription extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
+
+/*
+References:
+room adding multiple entities into the db
+https://stackoverflow.com/questions/48743239/how-to-add-new-tables-in-library-with-room
+https://stackoverflow.com/questions/44322178/room-schema-export-directory-is-not-provided-to-the-annotation-processor-so-we/44424908#44424908
+
+https://cloud.ibm.com/apidocs/language-translator/language-translator
+ */

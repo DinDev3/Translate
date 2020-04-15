@@ -36,3 +36,9 @@ public interface EnglishDAO {
     @Delete
     void deleteTask(EnglishEntered englishEntered);
 }
+
+/*
+References:
+https://stackoverflow.com/questions/52018405/android-room-database-how-to-query-alphabetically-by-name
+
+ */

@@ -111,3 +111,11 @@ public class MyEditAdapter extends RecyclerView.Adapter<MyEditAdapter.MyViewHold
 //        notifyDataSetChanged();
 //    }
 }
+
+/*
+References:
+android checkTextView
+https://abhiandroid.com/ui/checkedtextview
+https://c1ctech.com/android-checkedtextview-example/
+https://stackoverflow.com/questions/3201643/how-to-use-default-android-drawables
+ */

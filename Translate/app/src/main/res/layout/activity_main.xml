@@ -131,3 +131,11 @@
         app:layout_constraintTop_toBottomOf="@+id/dictionary_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--References:
+
+<a href="https://www.freepik.com/free-photos-vectors/people">People vector created by freepik - www.freepik.com</a>
+
+<a href="https://www.freepik.com/free-photos-vectors/book">Book vector created by freepik - www.freepik.com</a>
+
+-->

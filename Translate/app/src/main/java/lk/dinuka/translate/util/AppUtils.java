@@ -35,3 +35,9 @@ public class AppUtils {
 //        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 //    }
 }
+
+
+/*
+References:
+https://github.com/anitaa1990/RoomDb-Sample/blob/master/app/src/main/java/com/an/room/util/AppUtils.java
+ */
