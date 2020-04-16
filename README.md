@@ -35,10 +35,21 @@ The 6 options shown in the main screen opens the following screens:
 ## Basic functionalities developed in the app
 
 
+ _**IBM Cloud Watson Translator** Web service & **IBM Cloud Watson TextToSpeech** Web service are used to translate English phrases and pronounce translations._
+ 
+ Supported Translation Languages:
+Arabic, Bulgarian, Catalan, Chinese (Simplified), Chinese (Traditional), Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Irish, Indonesian, Italian, Japanese, Korean, Latvian, Lithuanian, Malay, Norwegian Bokmål, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Spanish, Swedish, Thai, Turkish, Urdu, Vietnamese
+
 ## Extra functionalities that I developed in the app
 
 
 ## Considerations taken when designing the UI/ UX of the app
+- Stuck to a blue colour theme. Used light and dark alternatives of blue to clearly visualize the text & all other content of the application.
+- Reasons for choosing blue as the core colour of the colour theme:
+    - noted as the favorite color across all genders
+    - symbolizes trust, loyalty, wisdom, confidence, intelligence, faith, truth, and heaven.
+- Use of vector images to represent the functionalities and benefits of using the app.
+- Provided the user with a feedback message for every input action with the use of TOAST messages.
 
 #### App animations
 <span>
@@ -46,10 +57,14 @@ The 6 options shown in the main screen opens the following screens:
     <img src="doc_resources/back_slider_animation.gif" height="500px" alt="back_slider_animation" />
 </span>
 
-## Landscape Layouts of all the screens
+## Good Practices of Design & Development that were followed
+- Object Relational Mapping of data with the SQLite database (ORM).
+- Saving time of creating and updation of data in the database.
+
+## Landscape Layouts
 ![landscapes](doc_resources/landscape.png)
 
-Landscape layouts were created for all the screens.
+Landscape layouts were created for all the screens that required separate layouts for landscape orientation. Shown above are two of them.
 <br/>In all the landscape layouts, most of the user input areas were kept to the right and the image displays were kept to the left/ the centre of the screen as required. This makes it easier for the user to enter input and makes it comfortable for the user to view the images displayed as most people are used to reading from the left of the screen.
 
 ---
@@ -58,12 +73,7 @@ Landscape layouts were created for all the screens.
 ### Software used to design UI elements
 - Figma
 - Adobe Illustrator 
- 
- 
- _**IBM Cloud Watson Translator** Web service & **IBM Cloud Watson TextToSpeech** Web service are used to translate English phrases and pronounce translations._
- 
- Supported Translation Languages:
-Arabic, Bulgarian, Catalan, Chinese (Simplified), Chinese (Traditional), Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Irish, Indonesian, Italian, Japanese, Korean, Latvian, Lithuanian, Malay, Norwegian Bokmål, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Spanish, Swedish, Thai, Turkish, Urdu, Vietnamese
+
  
  ---
  
