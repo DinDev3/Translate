@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
+
 import java.util.Collections;
 
 import lk.dinuka.translate.databases.repositories.EnglishRepository;
@@ -16,12 +19,17 @@ import lk.dinuka.translate.databases.repositories.EnglishRepository;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 
 public class AddPhrases extends AppCompatActivity {
+
+    private SlidrInterface slidr;
+
     private EditText mEnterEnglish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_phrases);
+
+        slidr = Slidr.attach(this);
 
         mEnterEnglish = findViewById(R.id.enter_to_save_multiText);
     }

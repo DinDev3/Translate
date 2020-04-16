@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ibm.watson.language_translator.v3.LanguageTranslator;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +32,8 @@ import static lk.dinuka.translate.Dictionary.savedLanguages;
 import static lk.dinuka.translate.MainActivity.foreignLanguageSubs;
 
 public class DictionarySubscriptions extends AppCompatActivity {
+    private SlidrInterface slidr;
+
     private LanguageTranslator translationService;          // translation service
 
     // reference to SharedPreferences object
@@ -56,6 +60,8 @@ public class DictionarySubscriptions extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_subscriptions);
+
+        slidr = Slidr.attach(this);
 
         // ---------------------------------
 

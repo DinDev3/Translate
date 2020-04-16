@@ -9,6 +9,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
+
 import java.util.ArrayList;
 
 import lk.dinuka.translate.services.MyDisplayAdapter;
@@ -19,11 +22,14 @@ public class DisplayPhrases extends AppCompatActivity {
     private MyDisplayAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private SlidrInterface slidr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_phrases);
+
+        slidr = Slidr.attach(this);
 
         recyclerView = findViewById(R.id.display_recycler_view);
         recyclerView.setHasFixedSize(true);     // change in content won't change the layout size of the RecyclerView

@@ -32,6 +32,8 @@ import com.ibm.watson.language_translator.v3.LanguageTranslator;
 import com.ibm.watson.language_translator.v3.model.TranslateOptions;
 import com.ibm.watson.language_translator.v3.model.TranslationResult;
 import com.ibm.watson.language_translator.v3.util.Language;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +47,8 @@ import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class Dictionary extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private SlidrInterface slidr;
 
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
@@ -101,6 +105,8 @@ public class Dictionary extends AppCompatActivity implements AdapterView.OnItemS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
+
+        slidr = Slidr.attach(this);
 
         progressBarHolder = (FrameLayout) findViewById(R.id.progressBarHolder);
 

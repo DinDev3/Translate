@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
+
 import lk.dinuka.translate.databases.entities.EnglishEntered;
 import lk.dinuka.translate.databases.repositories.EnglishRepository;
 import lk.dinuka.translate.services.MyEditAdapter;
@@ -21,6 +24,9 @@ import lk.dinuka.translate.services.MyEditAdapter;
 import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 
 public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEditAdapterListener {
+
+    private SlidrInterface slidr;
+
     private RecyclerView recyclerView;
     private MyEditAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -34,6 +40,8 @@ public class EditPhrases extends AppCompatActivity implements MyEditAdapter.OnEd
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_phrases);
+
+        slidr = Slidr.attach(this);
 
         mChosenEditText = findViewById(R.id.editText_plainText);
 
