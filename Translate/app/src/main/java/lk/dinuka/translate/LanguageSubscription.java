@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.language_translator.v3.LanguageTranslator;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +39,8 @@ import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class LanguageSubscription extends AppCompatActivity {
 
+    private SlidrInterface slidr;
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -50,6 +54,9 @@ public class LanguageSubscription extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_subscription);
+
+        slidr = Slidr.attach(this);
+
 
         // get and display all foreign languages stored in a separate entity of the db (ForeignLanguage)
         // with boolean value of subscribed
@@ -259,4 +266,8 @@ https://stackoverflow.com/questions/48743239/how-to-add-new-tables-in-library-wi
 https://stackoverflow.com/questions/44322178/room-schema-export-directory-is-not-provided-to-the-annotation-processor-so-we/44424908#44424908
 
 https://cloud.ibm.com/apidocs/language-translator/language-translator
+
+Sliding animations
+https://github.com/r0adkll/Slidr
+https://codinginflow.com/tutorials/android/slidr
  */

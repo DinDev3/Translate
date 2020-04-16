@@ -29,6 +29,8 @@ import com.ibm.watson.language_translator.v3.model.TranslationResult;
 import com.ibm.watson.language_translator.v3.util.Language;
 import com.ibm.watson.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +43,8 @@ import static lk.dinuka.translate.MainActivity.allEnglishFromDB;
 import static lk.dinuka.translate.MainActivity.languageCodes;
 
 public class TranslateActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, MyTranslateAdapter.OnTransAdapterListener {
+
+    private SlidrInterface slidr;
 
     //    private static final String TAG = "~*~*~*~*~*~";
     private RecyclerView recyclerView;
@@ -63,6 +67,8 @@ public class TranslateActivity extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_translate);
+
+        slidr = Slidr.attach(this);
 
         mDisplayTranslation = findViewById(R.id.translated_textView);        // TextView to display translation
 

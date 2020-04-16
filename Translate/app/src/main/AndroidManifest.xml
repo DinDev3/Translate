@@ -14,7 +14,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".DictionarySubscriptions"
-            android:label="Dictionary: Language Subscriptions" />
+            android:label="Dictionary: Language Subscriptions"
+            android:theme="@style/AppTheme.SlidrActivityTheme" />
         <activity
             android:name=".Dictionary"
             android:label="Dictionary" />
@@ -23,7 +24,8 @@
             android:label="Translate" />
         <activity
             android:name=".LanguageSubscription"
-            android:label="Language Subscriptions" />
+            android:label="Language Subscriptions"
+            android:theme="@style/AppTheme.SlidrActivityTheme" />
         <activity
             android:name=".EditPhrases"
             android:label="Edit Phrases" />
