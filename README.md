@@ -16,8 +16,8 @@ The user can view the translated text of his/ her desired language and also list
 
 
 ## Home Screen of Translate app
-Displayed below is the Home screen of the **Translate**
-![main_screen](docs/resources/main_screen.png)
+Displayed below is the Home screen of the **Translate** app.
+![main_screen](doc_resources/main_screen.png)
 
 The 6 options shown in the main screen opens the following screens:
 - **DICTIONARY:** Save all translations of multiple languages for offline use and view them when offline.
@@ -28,7 +28,9 @@ The 6 options shown in the main screen opens the following screens:
 - **TRANSLATE:** Let's the user to view translations of chosen words/ phrases and listen to the pronunciation of the translated words/ phrases.
 
 ## Featured Screens of Translate app
-![featured_screens](docs/resources/featured_screens.png)
+![featured_screens1](doc_resources/portrait_1.png)
+![featured_screens2](doc_resources/portrait_2.png)
+![featured_screens3](doc_resources/portrait_3.png)
 
 ## Basic functionalities developed in the app
 
@@ -38,9 +40,14 @@ The 6 options shown in the main screen opens the following screens:
 
 ## Considerations taken when designing the UI/ UX of the app
 
+#### App animations
+<span>
+    <img src="doc_resources/loading_animation.gif" height="500px" alt="loading_animation" />
+    <img src="doc_resources/back_slider_animation.gif" height="500px" alt="back_slider_animation" />
+</span>
 
 ## Landscape Layouts of all the screens
-![landscapes](docs/resources/landscapes.png)
+![landscapes](doc_resources/landscape.png)
 
 Landscape layouts were created for all the screens.
 <br/>In all the landscape layouts, most of the user input areas were kept to the right and the image displays were kept to the left/ the centre of the screen as required. This makes it easier for the user to enter input and makes it comfortable for the user to view the images displayed as most people are used to reading from the left of the screen.
