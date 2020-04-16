@@ -67,7 +67,7 @@ Arabic, Bulgarian, Catalan, Chinese (Simplified), Chinese (Traditional), Croatia
 
 ## Good Practices of Design & Development that were followed
 - Object Relational Mapping of data with the SQLite database (ORM).
-- Saving time of creating and updation of data in the database.
+- Saving date & time of creating and updation of data in the database.
 - Use of Recycler view elements to display lists of data.
 - Use of Android LiveData to receive records from the database.
 - Use of AsyncTasks when writting into the database and retrieving translations from the IBM API.
