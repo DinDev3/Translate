@@ -41,6 +41,11 @@ The 6 options shown in the main screen opens the following screens:
 Arabic, Bulgarian, Catalan, Chinese (Simplified), Chinese (Traditional), Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Irish, Indonesian, Italian, Japanese, Korean, Latvian, Lithuanian, Malay, Norwegian Bokmål, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Spanish, Swedish, Thai, Turkish, Urdu, Vietnamese
 
 ## Extra functionalities that I developed in the app
+- Search functionality of words based on any part of the word in Display Phrases section.
+- Auto capitalization of words in add English: to make the database records appear clean.
+- Use of the IBM API to get all new languages when the Language Subscriptions page is open and write into the database.
+  - If new languages are added later, they will be added without requiring an update.
+  - This is helpful when the user opens that app for the first time as well.
 
 
 ## Considerations taken when designing the UI/ UX of the app
@@ -50,6 +55,9 @@ Arabic, Bulgarian, Catalan, Chinese (Simplified), Chinese (Traditional), Croatia
     - symbolizes trust, loyalty, wisdom, confidence, intelligence, faith, truth, and heaven.
 - Use of vector images to represent the functionalities and benefits of using the app.
 - Provided the user with a feedback message for every input action with the use of TOAST messages.
+- Use of Fragments to clearly separate Recycler view elements in scrollable lists.
+- Displaying a loading animation when saving all translations of a chosen language into the database.
+- Allow the user to slide back form any screen to the previous screen by swiping to the right from left.
 
 #### App animations
 <span>
@@ -60,6 +68,12 @@ Arabic, Bulgarian, Catalan, Chinese (Simplified), Chinese (Traditional), Croatia
 ## Good Practices of Design & Development that were followed
 - Object Relational Mapping of data with the SQLite database (ORM).
 - Saving time of creating and updation of data in the database.
+- Use of Recycler view elements to display lists of data.
+- Use of Android LiveData to receive records from the database.
+- Use of AsyncTasks when writting into the database and retrieving translations from the IBM API.
+- Use of TimeStampConverter as a TypeConverter to write dates & times into the database.
+- Saved instance states when rotating the device and restored all view elements.
+- Handled Network connectivity errors and language translation errors.
 
 ## Landscape Layouts
 ![landscapes](doc_resources/landscape.png)
@@ -77,6 +91,10 @@ Landscape layouts were created for all the screens that required separate layout
  
  ---
  
+#### Third-party libraries used
+[Sliding animations](https://github.com/r0adkll/Slidr)
+https://codinginflow.com/tutorials/android/slidr
+ 
 #### Referred links to integrate Room persistant library 
 https://android.jlelse.eu/5-steps-to-implement-room-persistence-library-in-android-47b10cd47b24
 https://medium.com/@tonia.tkachuk/android-app-example-using-room-database-63f7091e69af
@@ -91,7 +109,7 @@ https://codelabs.developers.google.com/codelabs/android-room-with-a-view
 <br/>[Generate and sign apk to upload to playstore](https://developer.android.com/studio/publish/app-signing#sign-apk)
 
 #### Privacy policy generator
-[https://app-privacy-policy-generator.firebaseapp.com/#](https://app-privacy-policy-generator.firebaseapp.com/)
+[https://app-privacy-policy-generator.firebaseapp.com](https://app-privacy-policy-generator.firebaseapp.com/)
 
 #### Privacy policy hosted location
 [https://translate-0.flycricket.io/privacy.html](https://translate-0.flycricket.io/privacy.html)
