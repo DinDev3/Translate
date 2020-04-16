@@ -266,4 +266,8 @@ https://stackoverflow.com/questions/48743239/how-to-add-new-tables-in-library-wi
 https://stackoverflow.com/questions/44322178/room-schema-export-directory-is-not-provided-to-the-annotation-processor-so-we/44424908#44424908
 
 https://cloud.ibm.com/apidocs/language-translator/language-translator
+
+Sliding animations
+https://github.com/r0adkll/Slidr
+https://codinginflow.com/tutorials/android/slidr
  */
