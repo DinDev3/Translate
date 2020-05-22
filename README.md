@@ -113,3 +113,8 @@ https://codelabs.developers.google.com/codelabs/android-room-with-a-view
 
 #### Privacy policy hosted location
 [https://translate-0.flycricket.io/privacy.html](https://translate-0.flycricket.io/privacy.html)
+
+
+#### API References
+[https://cloud.ibm.com/apidocs/language-translator](https://cloud.ibm.com/apidocs/language-translator)
+<br/>[https://cloud.ibm.com/apidocs/text-to-speech](https://cloud.ibm.com/apidocs/text-to-speech)
