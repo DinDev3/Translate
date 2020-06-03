@@ -118,3 +118,6 @@ https://codelabs.developers.google.com/codelabs/android-room-with-a-view
 #### API References
 [https://cloud.ibm.com/apidocs/language-translator](https://cloud.ibm.com/apidocs/language-translator)
 <br/>[https://cloud.ibm.com/apidocs/text-to-speech](https://cloud.ibm.com/apidocs/text-to-speech)
+
+
+*This repository contains code that I implemented for my second year Mobile Development Coursework-2; which was based on Android Application Development.*
